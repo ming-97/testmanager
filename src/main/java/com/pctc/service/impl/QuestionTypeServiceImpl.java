@@ -1,0 +1,44 @@
+package com.pctc.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.pctc.dao.QuestionTypeMapper;
+import com.pctc.model.QuestionType;
+import com.pctc.model.QuestionTypeExample;
+import com.pctc.model.QuestionTypeExample.Criteria;
+import com.pctc.service.QuestionTypeService;
+
+@Service("questionTypeService")
+@Transactional
+public class QuestionTypeServiceImpl implements QuestionTypeService {
+
+	@Autowired
+	private QuestionTypeMapper questionTypeMapper;
+
+	// 1.根据id查询题型信息的实现
+	@Transactional(readOnly = true) // 事务注解：不需要对数据库数据进行操作，只是进行读操作
+	public QuestionType getQuestionTypeById(Long qtId) {
+		QuestionType questionType = new QuestionType();
+		questionType = questionTypeMapper.selectByPrimaryKey(qtId);
+		return questionType;
+	}
+
+	// 2.根据题型名称返回题型信息的实现
+	@Transactional(readOnly = true) // 事务注解：不需要对数据库数据进行操作，只是进行读操作
+	public QuestionType getQuestionTypeName(String qtName) {
+		QuestionType questionType = new QuestionType();
+		questionType = questionTypeMapper.selectByName(qtName);
+		return questionType;
+	}
+
+	//查询所有题型信息
+	public List<QuestionType> selectAllQuestionType(QuestionTypeExample example) {
+		List<QuestionType> list = questionTypeMapper.selectByExample(example);
+		return list;
+	}
+
+}

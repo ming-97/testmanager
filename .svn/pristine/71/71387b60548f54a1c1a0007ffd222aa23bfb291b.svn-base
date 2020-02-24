@@ -1,0 +1,53 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%
+	String path = request.getContextPath();
+	String basePath = request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort()
+			+ path + "/";
+	pageContext.setAttribute("webpath", path);
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<base href="<%=basePath%>">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="static/js/jquery-1.8.3.js"></script>
+<script type="text/javascript">
+
+$(function() {
+	
+	$("#nameid").blur(function() {
+		$("#namewrongid").empty();
+		var username = $("#nameid").val();
+		if(username == null || username == "") {
+			$("#namewrongid").html("用户名不能为空");
+			$("#namewrongid").css("color", "red");		
+		}
+	});
+
+	$("#passwordid").blur(function() {
+		$("#pwdwrongid").empty();
+		var pwd = $("#passwordid").val();
+		if(pwd == null || pwd == "") {
+			$("#pwdwrongid").html("密码不能为空");
+			$("#pwdwrongid").css("color", "red");		
+		}
+	});
+	
+
+});
+
+</script>
+</head>
+<body>
+<form action="teacher/teacherLogin" method="post">
+
+			
+			用户名：<input id="nameid" type="text" name="tUsername"> <span id="namewrongid"></span><br /> 
+			密码：<input id="passwordid" type="password" name="tPassword" /><span id="pwdwrongid"></span><br /> 		
+			<input id="btn" type="submit" value="登录" />
+		</form>
+</body>
+</html>

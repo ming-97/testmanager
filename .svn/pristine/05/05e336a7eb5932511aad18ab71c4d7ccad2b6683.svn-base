@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pctc.dao.StudentMapper" >
+  <resultMap id="BaseResultMap" type="com.pctc.model.Student" >
+    <id column="s_id" property="sId" jdbcType="BIGINT" />
+    <result column="s_insid" property="sInsid" jdbcType="BIGINT" />
+    <result column="s_username" property="sUsername" jdbcType="VARCHAR" />
+    <result column="s_password" property="sPassword" jdbcType="VARCHAR" />
+    <result column="s_create_by" property="sCreateBy" jdbcType="VARCHAR" />
+    <result column="s_create_time" property="sCreateTime" jdbcType="DATE" />
+    <result column="s_modify_by" property="sModifyBy" jdbcType="VARCHAR" />
+    <result column="s_modify_time" property="sModifyTime" jdbcType="DATE" />
+    <result column="s_delete" property="sDelete" jdbcType="BIT" />
+    <result column="s_version" property="sVersion" jdbcType="INTEGER" />
+    <result column="s_permission_no" property="sPermissionNo" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    s_id, s_insid, s_username, s_password, s_create_by, s_create_time, s_modify_by, s_modify_time, 
+    s_delete, s_version, s_permission_no
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pctc.model.StudentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from student
+    where s_id = #{sId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from student
+    where s_id = #{sId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pctc.model.StudentExample" >
+    delete from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pctc.model.Student" >
+    insert into student (s_id, s_insid, s_username, 
+      s_password, s_create_by, s_create_time, 
+      s_modify_by, s_modify_time, s_delete, 
+      s_version, s_permission_no)
+    values (#{sId,jdbcType=BIGINT}, #{sInsid,jdbcType=BIGINT}, #{sUsername,jdbcType=VARCHAR}, 
+      #{sPassword,jdbcType=VARCHAR}, #{sCreateBy,jdbcType=VARCHAR}, #{sCreateTime,jdbcType=DATE}, 
+      #{sModifyBy,jdbcType=VARCHAR}, #{sModifyTime,jdbcType=DATE}, #{sDelete,jdbcType=BIT}, 
+      #{sVersion,jdbcType=INTEGER}, #{sPermissionNo,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pctc.model.Student" >
+    insert into student
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="sId != null" >
+        s_id,
+      </if>
+      <if test="sInsid != null" >
+        s_insid,
+      </if>
+      <if test="sUsername != null" >
+        s_username,
+      </if>
+      <if test="sPassword != null" >
+        s_password,
+      </if>
+      <if test="sCreateBy != null" >
+        s_create_by,
+      </if>
+      <if test="sCreateTime != null" >
+        s_create_time,
+      </if>
+      <if test="sModifyBy != null" >
+        s_modify_by,
+      </if>
+      <if test="sModifyTime != null" >
+        s_modify_time,
+      </if>
+      <if test="sDelete != null" >
+        s_delete,
+      </if>
+      <if test="sVersion != null" >
+        s_version,
+      </if>
+      <if test="sPermissionNo != null" >
+        s_permission_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="sId != null" >
+        #{sId,jdbcType=BIGINT},
+      </if>
+      <if test="sInsid != null" >
+        #{sInsid,jdbcType=BIGINT},
+      </if>
+      <if test="sUsername != null" >
+        #{sUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="sPassword != null" >
+        #{sPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="sCreateBy != null" >
+        #{sCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="sCreateTime != null" >
+        #{sCreateTime,jdbcType=DATE},
+      </if>
+      <if test="sModifyBy != null" >
+        #{sModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="sModifyTime != null" >
+        #{sModifyTime,jdbcType=DATE},
+      </if>
+      <if test="sDelete != null" >
+        #{sDelete,jdbcType=BIT},
+      </if>
+      <if test="sVersion != null" >
+        #{sVersion,jdbcType=INTEGER},
+      </if>
+      <if test="sPermissionNo != null" >
+        #{sPermissionNo,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pctc.model.StudentExample" resultType="java.lang.Integer" >
+    select count(*) from student
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update student
+    <set >
+      <if test="record.sId != null" >
+        s_id = #{record.sId,jdbcType=BIGINT},
+      </if>
+      <if test="record.sInsid != null" >
+        s_insid = #{record.sInsid,jdbcType=BIGINT},
+      </if>
+      <if test="record.sUsername != null" >
+        s_username = #{record.sUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sPassword != null" >
+        s_password = #{record.sPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sCreateBy != null" >
+        s_create_by = #{record.sCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sCreateTime != null" >
+        s_create_time = #{record.sCreateTime,jdbcType=DATE},
+      </if>
+      <if test="record.sModifyBy != null" >
+        s_modify_by = #{record.sModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.sModifyTime != null" >
+        s_modify_time = #{record.sModifyTime,jdbcType=DATE},
+      </if>
+      <if test="record.sDelete != null" >
+        s_delete = #{record.sDelete,jdbcType=BIT},
+      </if>
+      <if test="record.sVersion != null" >
+        s_version = #{record.sVersion,jdbcType=INTEGER},
+      </if>
+      <if test="record.sPermissionNo != null" >
+        s_permission_no = #{record.sPermissionNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update student
+    set s_id = #{record.sId,jdbcType=BIGINT},
+      s_insid = #{record.sInsid,jdbcType=BIGINT},
+      s_username = #{record.sUsername,jdbcType=VARCHAR},
+      s_password = #{record.sPassword,jdbcType=VARCHAR},
+      s_create_by = #{record.sCreateBy,jdbcType=VARCHAR},
+      s_create_time = #{record.sCreateTime,jdbcType=DATE},
+      s_modify_by = #{record.sModifyBy,jdbcType=VARCHAR},
+      s_modify_time = #{record.sModifyTime,jdbcType=DATE},
+      s_delete = #{record.sDelete,jdbcType=BIT},
+      s_version = #{record.sVersion,jdbcType=INTEGER},
+      s_permission_no = #{record.sPermissionNo,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pctc.model.Student" >
+    update student
+    <set >
+      <if test="sInsid != null" >
+        s_insid = #{sInsid,jdbcType=BIGINT},
+      </if>
+      <if test="sUsername != null" >
+        s_username = #{sUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="sPassword != null" >
+        s_password = #{sPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="sCreateBy != null" >
+        s_create_by = #{sCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="sCreateTime != null" >
+        s_create_time = #{sCreateTime,jdbcType=DATE},
+      </if>
+      <if test="sModifyBy != null" >
+        s_modify_by = #{sModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="sModifyTime != null" >
+        s_modify_time = #{sModifyTime,jdbcType=DATE},
+      </if>
+      <if test="sDelete != null" >
+        s_delete = #{sDelete,jdbcType=BIT},
+      </if>
+      <if test="sVersion != null" >
+        s_version = #{sVersion,jdbcType=INTEGER},
+      </if>
+      <if test="sPermissionNo != null" >
+        s_permission_no = #{sPermissionNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    where s_id = #{sId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pctc.model.Student" >
+    update student
+    set s_insid = #{sInsid,jdbcType=BIGINT},
+      s_username = #{sUsername,jdbcType=VARCHAR},
+      s_password = #{sPassword,jdbcType=VARCHAR},
+      s_create_by = #{sCreateBy,jdbcType=VARCHAR},
+      s_create_time = #{sCreateTime,jdbcType=DATE},
+      s_modify_by = #{sModifyBy,jdbcType=VARCHAR},
+      s_modify_time = #{sModifyTime,jdbcType=DATE},
+      s_delete = #{sDelete,jdbcType=BIT},
+      s_version = #{sVersion,jdbcType=INTEGER},
+      s_permission_no = #{sPermissionNo,jdbcType=INTEGER}
+    where s_id = #{sId,jdbcType=BIGINT}
+  </update>
+</mapper>

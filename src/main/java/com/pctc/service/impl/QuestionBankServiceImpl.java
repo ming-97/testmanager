@@ -1,0 +1,79 @@
+package com.pctc.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.pctc.dao.QuestionBnakMapper;
+import com.pctc.dao.QuestionTypeMapper;
+import com.pctc.model.QuestionBnak;
+import com.pctc.model.QuestionBnakExample;
+import com.pctc.model.QuestionBnakExample.Criteria;
+import com.pctc.model.QuestionType;
+import com.pctc.model.QuestionTypeExample;
+import com.pctc.service.QuestionBankService;
+/**
+ * 对题库表进行增删改
+ * @author zw
+ *
+ */
+@Service("questionService")
+@Transactional
+public class QuestionBankServiceImpl implements QuestionBankService {
+	
+
+	@Autowired
+	private QuestionBnakMapper qBnakMapper;
+	
+	
+
+	//添加题库题目
+	public int insertQuestion(QuestionBnak qBnak) {
+		int count=0;
+		if(qBnak!=null)
+			count=qBnakMapper.insertSelective(qBnak);
+		return count;
+	}
+
+	//查询题库所有题目
+	@Transactional(readOnly=true)
+	public List<QuestionBnak> selectAllQuestion(QuestionBnakExample qBnakExample) {
+		List<QuestionBnak> list=qBnakMapper.selectByExample(qBnakExample);
+		return list;
+	}
+
+	//根据题目的id对题库题目进行修改
+	public int updateQuestionBnak(QuestionBnak qBnak) {
+		int count=0;
+		if(qBnak!=null){
+			count=qBnakMapper.updateByPrimaryKeySelective(qBnak);
+		}
+		return count;
+	}
+ 
+	
+	//根据题目id去题库查询题目信息
+	public QuestionBnak selectByQuestionId(QuestionBnak qBnak) {
+		QuestionBnak quBnak=qBnakMapper.selectByPrimaryKey(qBnak.getQbId());
+		return quBnak;
+	}
+
+
+	
+	//1.根据题库id查找试题信息的实现
+	@Transactional(readOnly=true)
+	public QuestionBnak getQusetionBankById(Long qbId) {
+		QuestionBnak questionBnak=qBnakMapper.selectByPrimaryKey(qbId);
+		return questionBnak;
+	}
+
+
+	//根据题目id删除题目，
+	public int deleteQuestionBnak(QuestionBnak qBnak) {
+		qBnak.setQbDelete(true);
+		int count=qBnakMapper.updateByPrimaryKeySelective(qBnak);
+		return count;
+	}
+}

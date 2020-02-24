@@ -1,0 +1,178 @@
+package com.pctc.action;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pctc.model.QuestionBnak;
+import com.pctc.model.QuestionCourseChapter;
+import com.pctc.model.QuestionCourseChapterExample;
+import com.pctc.model.QuestionCourseChapterExample.Criteria;
+import com.pctc.model.Teacher;
+import com.pctc.service.QuestionBankService;
+import com.pctc.service.QuestionCourseChapterService;
+
+@Controller
+@RequestMapping("questionCourseChapterManager")
+public class QuestionCourseChapterManager {
+
+	@Autowired
+	private QuestionCourseChapterService questionCourseChapterService;
+	
+	@Autowired 
+	private QuestionBankService questionBankService;
+	
+	
+	//查询所有章节练习题目
+	@RequestMapping("selectAllQuestionCourseChapter")
+	public String selectAllQuestionCourseChapter(QuestionCourseChapterExample example,
+			QuestionCourseChapter questionCourseChapter,Map<String, Object> map,@RequestParam(defaultValue="1",value="pageNum")Integer pageNum) {
+		if (questionCourseChapter != null && !"".equals(questionCourseChapter)) {
+			Criteria criteria = example.createCriteria();
+			criteria.andQccDeleteEqualTo(false);// 查询所有未删除的章节练习题
+			Page<QuestionCourseChapter> page=PageHelper.startPage(pageNum, 3);
+			List<QuestionCourseChapter> list =questionCourseChapterService.selectAllQuestionCourseChapter(example);
+			PageInfo<QuestionCourseChapter> pageInfo=new PageInfo<QuestionCourseChapter>(list,5);
+			map.put("questionCourseChapters", list);
+			map.put("pageInfo", pageInfo);
+		}
+		return "questionCourseChapterList";
+	}
+	
+	
+	//查看题目详情
+	@RequestMapping("selectQuestionCourseChapterByNameToPage")	
+	public String selectQuestionCourseChapterByName(QuestionCourseChapter qCourseChapter,Map<String, Object> map){
+		String[] strings=qCourseChapter.getQccQbid().split(",");
+		List<QuestionBnak> list=new ArrayList<QuestionBnak>();
+		QuestionBnak qBnak=null;
+		for(int i=0;i<strings.length;i++){
+			qBnak=questionBankService.getQusetionBankById(Long.parseLong(strings[i]));
+			list.add(qBnak);
+		}
+		map.put("qBnaks", list);
+		return "questioncoursechaptercontent";
+	}
+	
+	
+	
+	
+	//修改章节练习题目
+	@RequestMapping("updateQuestionCourseChapter")
+	public String updateQuestionCourseChapter(HttpServletRequest request,QuestionCourseChapter questionCourseChapter,Map<String, Object> map){
+		questionCourseChapter.setQccModifyTime(new Date());
+		Teacher teacher=(Teacher)request.getSession().getAttribute("teacher");//获取session中的值		questionCourseChapter.setQccModifyBy(teacher.gettUsername());
+		questionCourseChapter.setQccInsid(teacher.gettInsid());
+		questionCourseChapter.setQccDelete(false);
+		questionCourseChapterService.updateCourseChapter(questionCourseChapter);
+		return "redirect:../returnPage/toquestoinCourseChapter";
+	}
+	
+	
+	//删除课程练习题目
+	@ResponseBody
+	@RequestMapping(value="deleteQuestionCourseChapter",method=RequestMethod.POST)
+	public int  deleteQuestionCourseChapter(QuestionCourseChapter qCourseChapter){
+		int count=0;
+		qCourseChapter.setQccDelete(true);
+		int i=questionCourseChapterService.updateCourseChapter(qCourseChapter);
+		if(i>0){
+			count=1;
+		}else{
+			count=0;
+		}
+		return count;
+	}
+	
+	
+	
+	
+	//添加章节测试题目
+	@RequestMapping("insertQuestionCourseChapter")
+	public String insertQuestionCourseChapter(HttpServletRequest request,QuestionCourseChapter qChapter,Map<String, Object> map){
+		String[]  ssss=request.getParameterValues("names");
+		 String str=new String();
+		 for(int i=0;i<ssss.length;i++){//将字符串数字转化成字符串
+			 if(i==ssss.length-1){
+			 str+=ssss[i];
+			 }
+			 else{
+				 str+=ssss[i]+",";
+			 }
+		 }
+		qChapter.setQccCreateTime(new Date());
+		qChapter.setQccDelete(false);
+		qChapter.setQccQbid(str);
+		Teacher teacher=(Teacher)request.getSession().getAttribute("teacher");//获取session中的值	
+		qChapter.setQccCreateBy(teacher.gettUsername());
+		questionCourseChapterService.insertQuestionChapter(qChapter);
+		return "forward:../returnPage/toquestoinCourseChapter";
+	}
+	
+	
+	
+	
+	
+	
+	//验证是否包含不存在题库中的题目
+	@ResponseBody
+	@RequestMapping("checkqccQbid")
+	public boolean checkQccQbId(QuestionCourseChapter questionCourseChapter){
+		boolean exits=false;
+		if(questionCourseChapter!=null&&!"".equals(questionCourseChapter.getQccQbid().trim())){
+			String string=questionCourseChapter.getQccQbid();
+			String[] str=string.split(",");//用字符串划分
+			List<QuestionBnak> list=new ArrayList<QuestionBnak>();
+			for (String string2:str){
+				long i =Long.parseLong(string2);
+				QuestionBnak qBnak=questionBankService.getQusetionBankById(i);//根据页面传递的题目号去题库中查询
+				if(qBnak!=null&&!"".equals(qBnak)){
+					list.add(qBnak);
+				}
+			}
+			if(list.size()==str.length){
+				exits=false;
+			}
+			else{
+				exits=true;
+			}	
+			}
+			if("".equals(questionCourseChapter.getQccQbid().trim())){
+				exits=false;
+			}
+				return exits;
+	}
+	
+	
+	
+
+	//初始化时间函数
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(
+				dateFormat, false));
+		       //true:允许输入空值，false:不能为空值    
+	}
+	
+
+}

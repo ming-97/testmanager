@@ -1,0 +1,60 @@
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+ <table>
+			<tr>
+				<td>编号</td>
+				<td>机构代号</td>
+				<td>姓名</td>
+				<td>密码</td>
+				<td>0或1</td>
+			</tr>
+		<c:forEach items="${teachers}" var="teacher">
+			<tr>
+				<td>${teacher.tId }</td>
+				<td>${teacher.tInsid }</td>
+				<td>${teacher.tUsername }</td>
+				<td>${teacher.tPassword }</td>
+				<td>${teacher.tDelete }</td>
+				
+			</tr>
+		</c:forEach>
+	
+	</table>
+	
+	<div>
+  
+      当前 ${infos.pageNum}页,总${infos.pages}页,总 ${infos.total} 条记录
+      
+   
+  <a href="${webpath}teacherPage?pagenum=1">首页</a>  
+  
+  
+  <c:if test="${infos.hasPreviousPage }">
+   <a href="${webpath}teacherPage?pagenum=${infos.pageNum-1}">上一页</a>
+  </c:if>
+    
+      
+  <c:forEach items="${infos.navigatepageNums}" var="pagenumber">
+  <a href="${webpath}teacherPage?pagenum=${pagenumber}">${pagenumber}</a> 
+  </c:forEach>
+  
+  
+  <c:if test="${infos.hasNextPage }">
+   <a href="${webpath}teacherPage?pagenum=${infos.pageNum+1}">下一页</a>
+   </c:if>
+  
+
+   
+    <a href="${webpath}teacherPage?pagenum=${infos.pages}">末页</a>   
+  
+  </div>
+  
+</body>
+</html>

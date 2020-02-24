@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pctc.dao.QuestionCourseChapterMapper" >
+  <resultMap id="BaseResultMap" type="com.pctc.model.QuestionCourseChapter" >
+    <id column="qcc_id" property="qccId" jdbcType="BIGINT" />
+    <result column="qcc_ccid" property="qccCcid" jdbcType="BIGINT" />
+    <result column="qcc_qbid" property="qccQbid" jdbcType="VARCHAR" />
+    <result column="qcc_insid" property="qccInsid" jdbcType="BIGINT" />
+    <result column="qcc_create_by" property="qccCreateBy" jdbcType="VARCHAR" />
+    <result column="qcc_create_time" property="qccCreateTime" jdbcType="DATE" />
+    <result column="qcc_modify_by" property="qccModifyBy" jdbcType="VARCHAR" />
+    <result column="qcc_modify_time" property="qccModifyTime" jdbcType="DATE" />
+    <result column="qcc_delete" property="qccDelete" jdbcType="BIT" />
+    <result column="qcc_version" property="qccVersion" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    qcc_id, qcc_ccid, qcc_qbid, qcc_insid, qcc_create_by, qcc_create_time, qcc_modify_by, 
+    qcc_modify_time, qcc_delete, qcc_version
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pctc.model.QuestionCourseChapterExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from question_course_chapter
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from question_course_chapter
+    where qcc_id = #{qccId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from question_course_chapter
+    where qcc_id = #{qccId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pctc.model.QuestionCourseChapterExample" >
+    delete from question_course_chapter
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pctc.model.QuestionCourseChapter" >
+    insert into question_course_chapter (qcc_id, qcc_ccid, qcc_qbid, 
+      qcc_insid, qcc_create_by, qcc_create_time, 
+      qcc_modify_by, qcc_modify_time, qcc_delete, 
+      qcc_version)
+    values (#{qccId,jdbcType=BIGINT}, #{qccCcid,jdbcType=BIGINT}, #{qccQbid,jdbcType=VARCHAR}, 
+      #{qccInsid,jdbcType=BIGINT}, #{qccCreateBy,jdbcType=VARCHAR}, #{qccCreateTime,jdbcType=DATE}, 
+      #{qccModifyBy,jdbcType=VARCHAR}, #{qccModifyTime,jdbcType=DATE}, #{qccDelete,jdbcType=BIT}, 
+      #{qccVersion,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pctc.model.QuestionCourseChapter" >
+    insert into question_course_chapter
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="qccId != null" >
+        qcc_id,
+      </if>
+      <if test="qccCcid != null" >
+        qcc_ccid,
+      </if>
+      <if test="qccQbid != null" >
+        qcc_qbid,
+      </if>
+      <if test="qccInsid != null" >
+        qcc_insid,
+      </if>
+      <if test="qccCreateBy != null" >
+        qcc_create_by,
+      </if>
+      <if test="qccCreateTime != null" >
+        qcc_create_time,
+      </if>
+      <if test="qccModifyBy != null" >
+        qcc_modify_by,
+      </if>
+      <if test="qccModifyTime != null" >
+        qcc_modify_time,
+      </if>
+      <if test="qccDelete != null" >
+        qcc_delete,
+      </if>
+      <if test="qccVersion != null" >
+        qcc_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="qccId != null" >
+        #{qccId,jdbcType=BIGINT},
+      </if>
+      <if test="qccCcid != null" >
+        #{qccCcid,jdbcType=BIGINT},
+      </if>
+      <if test="qccQbid != null" >
+        #{qccQbid,jdbcType=VARCHAR},
+      </if>
+      <if test="qccInsid != null" >
+        #{qccInsid,jdbcType=BIGINT},
+      </if>
+      <if test="qccCreateBy != null" >
+        #{qccCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="qccCreateTime != null" >
+        #{qccCreateTime,jdbcType=DATE},
+      </if>
+      <if test="qccModifyBy != null" >
+        #{qccModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="qccModifyTime != null" >
+        #{qccModifyTime,jdbcType=DATE},
+      </if>
+      <if test="qccDelete != null" >
+        #{qccDelete,jdbcType=BIT},
+      </if>
+      <if test="qccVersion != null" >
+        #{qccVersion,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pctc.model.QuestionCourseChapterExample" resultType="java.lang.Integer" >
+    select count(*) from question_course_chapter
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update question_course_chapter
+    <set >
+      <if test="record.qccId != null" >
+        qcc_id = #{record.qccId,jdbcType=BIGINT},
+      </if>
+      <if test="record.qccCcid != null" >
+        qcc_ccid = #{record.qccCcid,jdbcType=BIGINT},
+      </if>
+      <if test="record.qccQbid != null" >
+        qcc_qbid = #{record.qccQbid,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qccInsid != null" >
+        qcc_insid = #{record.qccInsid,jdbcType=BIGINT},
+      </if>
+      <if test="record.qccCreateBy != null" >
+        qcc_create_by = #{record.qccCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qccCreateTime != null" >
+        qcc_create_time = #{record.qccCreateTime,jdbcType=DATE},
+      </if>
+      <if test="record.qccModifyBy != null" >
+        qcc_modify_by = #{record.qccModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qccModifyTime != null" >
+        qcc_modify_time = #{record.qccModifyTime,jdbcType=DATE},
+      </if>
+      <if test="record.qccDelete != null" >
+        qcc_delete = #{record.qccDelete,jdbcType=BIT},
+      </if>
+      <if test="record.qccVersion != null" >
+        qcc_version = #{record.qccVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update question_course_chapter
+    set qcc_id = #{record.qccId,jdbcType=BIGINT},
+      qcc_ccid = #{record.qccCcid,jdbcType=BIGINT},
+      qcc_qbid = #{record.qccQbid,jdbcType=VARCHAR},
+      qcc_insid = #{record.qccInsid,jdbcType=BIGINT},
+      qcc_create_by = #{record.qccCreateBy,jdbcType=VARCHAR},
+      qcc_create_time = #{record.qccCreateTime,jdbcType=DATE},
+      qcc_modify_by = #{record.qccModifyBy,jdbcType=VARCHAR},
+      qcc_modify_time = #{record.qccModifyTime,jdbcType=DATE},
+      qcc_delete = #{record.qccDelete,jdbcType=BIT},
+      qcc_version = #{record.qccVersion,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pctc.model.QuestionCourseChapter" >
+    update question_course_chapter
+    <set >
+      <if test="qccCcid != null" >
+        qcc_ccid = #{qccCcid,jdbcType=BIGINT},
+      </if>
+      <if test="qccQbid != null" >
+        qcc_qbid = #{qccQbid,jdbcType=VARCHAR},
+      </if>
+      <if test="qccInsid != null" >
+        qcc_insid = #{qccInsid,jdbcType=BIGINT},
+      </if>
+      <if test="qccCreateBy != null" >
+        qcc_create_by = #{qccCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="qccCreateTime != null" >
+        qcc_create_time = #{qccCreateTime,jdbcType=DATE},
+      </if>
+      <if test="qccModifyBy != null" >
+        qcc_modify_by = #{qccModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="qccModifyTime != null" >
+        qcc_modify_time = #{qccModifyTime,jdbcType=DATE},
+      </if>
+      <if test="qccDelete != null" >
+        qcc_delete = #{qccDelete,jdbcType=BIT},
+      </if>
+      <if test="qccVersion != null" >
+        qcc_version = #{qccVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    where qcc_id = #{qccId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pctc.model.QuestionCourseChapter" >
+    update question_course_chapter
+    set qcc_ccid = #{qccCcid,jdbcType=BIGINT},
+      qcc_qbid = #{qccQbid,jdbcType=VARCHAR},
+      qcc_insid = #{qccInsid,jdbcType=BIGINT},
+      qcc_create_by = #{qccCreateBy,jdbcType=VARCHAR},
+      qcc_create_time = #{qccCreateTime,jdbcType=DATE},
+      qcc_modify_by = #{qccModifyBy,jdbcType=VARCHAR},
+      qcc_modify_time = #{qccModifyTime,jdbcType=DATE},
+      qcc_delete = #{qccDelete,jdbcType=BIT},
+      qcc_version = #{qccVersion,jdbcType=INTEGER}
+    where qcc_id = #{qccId,jdbcType=BIGINT}
+  </update>
+</mapper>

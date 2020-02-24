@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pctc.dao.CourseChapterMapper" >
+  <resultMap id="BaseResultMap" type="com.pctc.model.CourseChapter" >
+    <id column="cc_id" property="ccId" jdbcType="BIGINT" />
+    <result column="cc_cid" property="ccCid" jdbcType="BIGINT" />
+    <result column="cc_insid" property="ccInsid" jdbcType="BIGINT" />
+    <result column="cc_name" property="ccName" jdbcType="VARCHAR" />
+    <result column="cc_create_by" property="ccCreateBy" jdbcType="VARCHAR" />
+    <result column="cc_create_time" property="ccCreateTime" jdbcType="DATE" />
+    <result column="cc_modify_by" property="ccModifyBy" jdbcType="VARCHAR" />
+    <result column="cc_modify_time" property="ccModifyTime" jdbcType="DATE" />
+    <result column="cc_delete" property="ccDelete" jdbcType="BIT" />
+    <result column="cc_version" property="ccVersion" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    cc_id, cc_cid, cc_insid, cc_name, cc_create_by, cc_create_time, cc_modify_by, cc_modify_time, 
+    cc_delete, cc_version
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pctc.model.CourseChapterExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from course_chapter
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from course_chapter
+    where cc_id = #{ccId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from course_chapter
+    where cc_id = #{ccId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pctc.model.CourseChapterExample" >
+    delete from course_chapter
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pctc.model.CourseChapter" >
+    insert into course_chapter (cc_id, cc_cid, cc_insid, 
+      cc_name, cc_create_by, cc_create_time, 
+      cc_modify_by, cc_modify_time, cc_delete, 
+      cc_version)
+    values (#{ccId,jdbcType=BIGINT}, #{ccCid,jdbcType=BIGINT}, #{ccInsid,jdbcType=BIGINT}, 
+      #{ccName,jdbcType=VARCHAR}, #{ccCreateBy,jdbcType=VARCHAR}, #{ccCreateTime,jdbcType=DATE}, 
+      #{ccModifyBy,jdbcType=VARCHAR}, #{ccModifyTime,jdbcType=DATE}, #{ccDelete,jdbcType=BIT}, 
+      #{ccVersion,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pctc.model.CourseChapter" >
+    insert into course_chapter
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="ccId != null" >
+        cc_id,
+      </if>
+      <if test="ccCid != null" >
+        cc_cid,
+      </if>
+      <if test="ccInsid != null" >
+        cc_insid,
+      </if>
+      <if test="ccName != null" >
+        cc_name,
+      </if>
+      <if test="ccCreateBy != null" >
+        cc_create_by,
+      </if>
+      <if test="ccCreateTime != null" >
+        cc_create_time,
+      </if>
+      <if test="ccModifyBy != null" >
+        cc_modify_by,
+      </if>
+      <if test="ccModifyTime != null" >
+        cc_modify_time,
+      </if>
+      <if test="ccDelete != null" >
+        cc_delete,
+      </if>
+      <if test="ccVersion != null" >
+        cc_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="ccId != null" >
+        #{ccId,jdbcType=BIGINT},
+      </if>
+      <if test="ccCid != null" >
+        #{ccCid,jdbcType=BIGINT},
+      </if>
+      <if test="ccInsid != null" >
+        #{ccInsid,jdbcType=BIGINT},
+      </if>
+      <if test="ccName != null" >
+        #{ccName,jdbcType=VARCHAR},
+      </if>
+      <if test="ccCreateBy != null" >
+        #{ccCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="ccCreateTime != null" >
+        #{ccCreateTime,jdbcType=DATE},
+      </if>
+      <if test="ccModifyBy != null" >
+        #{ccModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="ccModifyTime != null" >
+        #{ccModifyTime,jdbcType=DATE},
+      </if>
+      <if test="ccDelete != null" >
+        #{ccDelete,jdbcType=BIT},
+      </if>
+      <if test="ccVersion != null" >
+        #{ccVersion,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pctc.model.CourseChapterExample" resultType="java.lang.Integer" >
+    select count(*) from course_chapter
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update course_chapter
+    <set >
+      <if test="record.ccId != null" >
+        cc_id = #{record.ccId,jdbcType=BIGINT},
+      </if>
+      <if test="record.ccCid != null" >
+        cc_cid = #{record.ccCid,jdbcType=BIGINT},
+      </if>
+      <if test="record.ccInsid != null" >
+        cc_insid = #{record.ccInsid,jdbcType=BIGINT},
+      </if>
+      <if test="record.ccName != null" >
+        cc_name = #{record.ccName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ccCreateBy != null" >
+        cc_create_by = #{record.ccCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ccCreateTime != null" >
+        cc_create_time = #{record.ccCreateTime,jdbcType=DATE},
+      </if>
+      <if test="record.ccModifyBy != null" >
+        cc_modify_by = #{record.ccModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ccModifyTime != null" >
+        cc_modify_time = #{record.ccModifyTime,jdbcType=DATE},
+      </if>
+      <if test="record.ccDelete != null" >
+        cc_delete = #{record.ccDelete,jdbcType=BIT},
+      </if>
+      <if test="record.ccVersion != null" >
+        cc_version = #{record.ccVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update course_chapter
+    set cc_id = #{record.ccId,jdbcType=BIGINT},
+      cc_cid = #{record.ccCid,jdbcType=BIGINT},
+      cc_insid = #{record.ccInsid,jdbcType=BIGINT},
+      cc_name = #{record.ccName,jdbcType=VARCHAR},
+      cc_create_by = #{record.ccCreateBy,jdbcType=VARCHAR},
+      cc_create_time = #{record.ccCreateTime,jdbcType=DATE},
+      cc_modify_by = #{record.ccModifyBy,jdbcType=VARCHAR},
+      cc_modify_time = #{record.ccModifyTime,jdbcType=DATE},
+      cc_delete = #{record.ccDelete,jdbcType=BIT},
+      cc_version = #{record.ccVersion,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pctc.model.CourseChapter" >
+    update course_chapter
+    <set >
+      <if test="ccCid != null" >
+        cc_cid = #{ccCid,jdbcType=BIGINT},
+      </if>
+      <if test="ccInsid != null" >
+        cc_insid = #{ccInsid,jdbcType=BIGINT},
+      </if>
+      <if test="ccName != null" >
+        cc_name = #{ccName,jdbcType=VARCHAR},
+      </if>
+      <if test="ccCreateBy != null" >
+        cc_create_by = #{ccCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="ccCreateTime != null" >
+        cc_create_time = #{ccCreateTime,jdbcType=DATE},
+      </if>
+      <if test="ccModifyBy != null" >
+        cc_modify_by = #{ccModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="ccModifyTime != null" >
+        cc_modify_time = #{ccModifyTime,jdbcType=DATE},
+      </if>
+      <if test="ccDelete != null" >
+        cc_delete = #{ccDelete,jdbcType=BIT},
+      </if>
+      <if test="ccVersion != null" >
+        cc_version = #{ccVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    where cc_id = #{ccId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pctc.model.CourseChapter" >
+    update course_chapter
+    set cc_cid = #{ccCid,jdbcType=BIGINT},
+      cc_insid = #{ccInsid,jdbcType=BIGINT},
+      cc_name = #{ccName,jdbcType=VARCHAR},
+      cc_create_by = #{ccCreateBy,jdbcType=VARCHAR},
+      cc_create_time = #{ccCreateTime,jdbcType=DATE},
+      cc_modify_by = #{ccModifyBy,jdbcType=VARCHAR},
+      cc_modify_time = #{ccModifyTime,jdbcType=DATE},
+      cc_delete = #{ccDelete,jdbcType=BIT},
+      cc_version = #{ccVersion,jdbcType=INTEGER}
+    where cc_id = #{ccId,jdbcType=BIGINT}
+  </update>
+</mapper>

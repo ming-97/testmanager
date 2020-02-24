@@ -1,0 +1,186 @@
+package com.pctc.action;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+
+import com.pctc.model.Teacher;
+import com.pctc.model.TeacherExample;
+import com.pctc.model.TeacherExample.Criteria;
+import com.pctc.service.TeacherService;
+
+
+@Controller
+@RequestMapping("teacher")
+public class TeacherAction {
+	
+	
+	@Autowired
+	private TeacherService teacherService;
+	
+	//查询所有教师信息
+	@RequestMapping("teachers")
+	public String seleteTeacher(Map<String,Object>map){
+		TeacherExample teacherExample=null;
+		List<Teacher> teachers=teacherService.seleteByExample(teacherExample);
+		map.put("teachers",teachers);
+		return "seleteteacher";
+		
+	}
+	//多条件查询
+	@RequestMapping("toteacherifmanyPage")
+	public String toteacherifmanyPage(){
+		return "teacherList";
+	}
+	
+
+	@RequestMapping("teacherifmany")
+	public String seleteTeacherIfMany(Map<String, Object>map,Teacher teacher ){
+		
+		TeacherExample teacherExample =new TeacherExample();
+		Criteria criteria =teacherExample.createCriteria();
+		if(teacher.gettUsername() !=null && !"".equals(teacher.gettUsername().trim()))
+			criteria.andTUsernameEqualTo(teacher.gettUsername());
+		if(teacher.gettPassword() !=null && !"".equals(teacher.gettPassword().trim()))
+				criteria.andTPasswordEqualTo(teacher.gettPassword());
+		List<Teacher> teachers =teacherService.seleteByExample(teacherExample);
+		map.put("teachers", teachers);    
+		return "teacherList";
+	}
+		
+	//跳转的添加页面
+	@RequestMapping("teacherAddInput")
+	public String  addTeacher(){
+		return "teacherAdd";
+	}
+	  // 执行添加教师业务
+			@RequestMapping(value = "teacherAddForm1")
+			public String addStudent(Teacher teacher) {
+				
+				//当前用户名是否存在
+				boolean exits=false;
+				teacher.settDelete(false);
+		    	TeacherExample teacherExample = new TeacherExample();
+				Criteria criteria = teacherExample.createCriteria();
+                /* if(teacher.gettInsid()!=null)
+                	 criteria.andTInsidEqualTo(teacher.gettInsid());*/
+				if (teacher.gettUsername() != null && !teacher.gettUsername().trim().equals(""))
+					criteria.andTUsernameEqualTo(teacher.gettUsername());
+				/*if(teacher.gettPassword() !=null && !teacher.gettPassword().trim().equals(""))
+					criteria.andTPasswordEqualTo(teacher.gettPassword());*/
+
+				List<Teacher> teachers = teacherService.seleteByExample(teacherExample);
+			     if (teachers.size()>0)
+			    	 exits=true;
+			     else
+			    	 exits=false;
+				if (!exits)
+				{
+				  teacherService.inseltTeacher(teacher);
+				   return "success";
+				}
+				else
+				{
+					return "teacherAdd";
+				}
+					
+	     		
+			}
+		
+	
+	//添加教师的业务
+	 @ResponseBody
+	@RequestMapping(value="teacherAddForm")
+	public boolean addTeacher(Teacher teacher){
+		boolean exits=false;
+		teacher.settDelete(false);
+		TeacherExample teacherExample =new TeacherExample();
+		Criteria criteria =teacherExample.createCriteria();
+		
+		/*if(teacher.gettInsid()!=null)
+       	 criteria.andTInsidEqualTo(teacher.gettInsid());*/
+		if (teacher.gettUsername() != null && !teacher.gettUsername().trim().equals(""))
+			criteria.andTUsernameEqualTo(teacher.gettUsername());
+		/*if(teacher.gettPassword() !=null && !teacher.gettPassword().trim().equals(""))
+			criteria.andTPasswordEqualTo(teacher.gettPassword());
+	*/
+		List<Teacher> teachers =teacherService.seleteByExample(teacherExample);
+	    if (teachers.size()>0)
+	    	 exits=true;
+	     else
+	      exits=false;
+	     
+		return exits;
+	}
+	
+	
+	
+	//分页查询所有数据
+	@RequestMapping("teacherPage")
+	public String getTeacherpage(@RequestParam(value = "pagenum", defaultValue = "1") Integer pagenum,Map<String, Object> map){
+		//放在查询之前，分页插件PageHelper
+		   Page<Object> page =PageHelper.startPage(pagenum,10);//第几页第几条
+		   TeacherExample teacherExample =new TeacherExample();
+		   List<Teacher> teachers = teacherService.seleteByExample(teacherExample);
+		   //分页插件信息PageInfo
+		   PageInfo<Teacher> info =new PageInfo<Teacher>(teachers,3);		   
+		   map.put("teachers", teachers);
+		   map.put("infos", info);
+		   return "teacherList2";
+	}
+
+	//查询所有教师信息
+		@RequestMapping("updatedeleteTeacher")
+		public String updatedeleteTeacher(Map<String,Object>map){
+			TeacherExample teacherExample=null;
+			List<Teacher> teachers=teacherService.seleteByExample(teacherExample);
+			map.put("teacherss",teachers);
+			return "teacherList3";
+			
+		}
+	//跳转的修改页面
+	@RequestMapping("updateTeacherUi")
+	public String updateTeacherUi(Long tId,Map<String, Object>map){
+		Teacher teacher=teacherService.selectTeacher(tId);
+		if(teacher !=null){
+			map.put("teacher", teacher);
+		}
+		return "updateTeacher";
+	}
+	
+	//修改数据
+	@RequestMapping("updateTeacher")
+	public String updateTeacher(Teacher teacher){
+		teacher.settDelete(false);
+		teacherService.updateTeacher(teacher);
+		return "forward:updatedeleteTeacher";
+	}
+	
+	//真删除数据
+	@RequestMapping("deleteTeacher")
+	public String deleteTeacher(Long tId){
+		teacherService.deleteTeacher(tId);
+		return "success";
+		
+	}
+	
+	//假删除
+	@RequestMapping("deleteTeacherFalse")
+     public	 String deleteTeacherFalse(Long tId){
+		teacherService.deleteTeacherFalse(tId);
+		return "success";
+	}
+	
+	
+	
+	
+}

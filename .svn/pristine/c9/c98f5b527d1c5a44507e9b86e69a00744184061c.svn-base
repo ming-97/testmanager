@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pctc.dao.QuestionBnakMapper" >
+  <resultMap id="BaseResultMap" type="com.pctc.model.QuestionBnak" >
+    <id column="qb_id" property="qbId" jdbcType="BIGINT" />
+    <result column="qb_ccid" property="qbCcid" jdbcType="BIGINT" />
+    <result column="qb_qtid" property="qbQtid" jdbcType="BIGINT" />
+    <result column="qb_insid" property="qbInsid" jdbcType="BIGINT" />
+    <result column="qb_content" property="qbContent" jdbcType="VARCHAR" />
+    <result column="qb_options_a" property="qbOptionsA" jdbcType="VARCHAR" />
+    <result column="qb_options_b" property="qbOptionsB" jdbcType="VARCHAR" />
+    <result column="qb_options_c" property="qbOptionsC" jdbcType="VARCHAR" />
+    <result column="qb_options_d" property="qbOptionsD" jdbcType="VARCHAR" />
+    <result column="qb_image_url" property="qbImageUrl" jdbcType="VARCHAR" />
+    <result column="qb_answer" property="qbAnswer" jdbcType="VARCHAR" />
+    <result column="qb_create_by" property="qbCreateBy" jdbcType="VARCHAR" />
+    <result column="qb_create_time" property="qbCreateTime" jdbcType="DATE" />
+    <result column="qb_modify_by" property="qbModifyBy" jdbcType="VARCHAR" />
+    <result column="qb_modify_time" property="qbModifyTime" jdbcType="DATE" />
+    <result column="qb_delete" property="qbDelete" jdbcType="BIT" />
+    <result column="qb_version" property="qbVersion" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    qb_id, qb_ccid, qb_qtid, qb_insid, qb_content, qb_options_a, qb_options_b, qb_options_c, 
+    qb_options_d, qb_image_url, qb_answer, qb_create_by, qb_create_time, qb_modify_by, 
+    qb_modify_time, qb_delete, qb_version
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pctc.model.QuestionBnakExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from question_bank
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from question_bank
+    where qb_id = #{qbId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from question_bank
+    where qb_id = #{qbId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pctc.model.QuestionBnakExample" >
+    delete from question_bank
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pctc.model.QuestionBnak" >
+    insert into question_bank (qb_id, qb_ccid, qb_qtid, 
+      qb_insid, qb_content, qb_options_a, 
+      qb_options_b, qb_options_c, qb_options_d, 
+      qb_image_url, qb_answer, qb_create_by, 
+      qb_create_time, qb_modify_by, qb_modify_time, 
+      qb_delete, qb_version)
+    values (#{qbId,jdbcType=BIGINT}, #{qbCcid,jdbcType=BIGINT}, #{qbQtid,jdbcType=BIGINT}, 
+      #{qbInsid,jdbcType=BIGINT}, #{qbContent,jdbcType=VARCHAR}, #{qbOptionsA,jdbcType=VARCHAR}, 
+      #{qbOptionsB,jdbcType=VARCHAR}, #{qbOptionsC,jdbcType=VARCHAR}, #{qbOptionsD,jdbcType=VARCHAR}, 
+      #{qbImageUrl,jdbcType=VARCHAR}, #{qbAnswer,jdbcType=VARCHAR}, #{qbCreateBy,jdbcType=VARCHAR}, 
+      #{qbCreateTime,jdbcType=DATE}, #{qbModifyBy,jdbcType=VARCHAR}, #{qbModifyTime,jdbcType=DATE}, 
+      #{qbDelete,jdbcType=BIT}, #{qbVersion,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pctc.model.QuestionBnak" >
+    insert into question_bank
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="qbId != null" >
+        qb_id,
+      </if>
+      <if test="qbCcid != null" >
+        qb_ccid,
+      </if>
+      <if test="qbQtid != null" >
+        qb_qtid,
+      </if>
+      <if test="qbInsid != null" >
+        qb_insid,
+      </if>
+      <if test="qbContent != null" >
+        qb_content,
+      </if>
+      <if test="qbOptionsA != null" >
+        qb_options_a,
+      </if>
+      <if test="qbOptionsB != null" >
+        qb_options_b,
+      </if>
+      <if test="qbOptionsC != null" >
+        qb_options_c,
+      </if>
+      <if test="qbOptionsD != null" >
+        qb_options_d,
+      </if>
+      <if test="qbImageUrl != null" >
+        qb_image_url,
+      </if>
+      <if test="qbAnswer != null" >
+        qb_answer,
+      </if>
+      <if test="qbCreateBy != null" >
+        qb_create_by,
+      </if>
+      <if test="qbCreateTime != null" >
+        qb_create_time,
+      </if>
+      <if test="qbModifyBy != null" >
+        qb_modify_by,
+      </if>
+      <if test="qbModifyTime != null" >
+        qb_modify_time,
+      </if>
+      <if test="qbDelete != null" >
+        qb_delete,
+      </if>
+      <if test="qbVersion != null" >
+        qb_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="qbId != null" >
+        #{qbId,jdbcType=BIGINT},
+      </if>
+      <if test="qbCcid != null" >
+        #{qbCcid,jdbcType=BIGINT},
+      </if>
+      <if test="qbQtid != null" >
+        #{qbQtid,jdbcType=BIGINT},
+      </if>
+      <if test="qbInsid != null" >
+        #{qbInsid,jdbcType=BIGINT},
+      </if>
+      <if test="qbContent != null" >
+        #{qbContent,jdbcType=VARCHAR},
+      </if>
+      <if test="qbOptionsA != null" >
+        #{qbOptionsA,jdbcType=VARCHAR},
+      </if>
+      <if test="qbOptionsB != null" >
+        #{qbOptionsB,jdbcType=VARCHAR},
+      </if>
+      <if test="qbOptionsC != null" >
+        #{qbOptionsC,jdbcType=VARCHAR},
+      </if>
+      <if test="qbOptionsD != null" >
+        #{qbOptionsD,jdbcType=VARCHAR},
+      </if>
+      <if test="qbImageUrl != null" >
+        #{qbImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="qbAnswer != null" >
+        #{qbAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="qbCreateBy != null" >
+        #{qbCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="qbCreateTime != null" >
+        #{qbCreateTime,jdbcType=DATE},
+      </if>
+      <if test="qbModifyBy != null" >
+        #{qbModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="qbModifyTime != null" >
+        #{qbModifyTime,jdbcType=DATE},
+      </if>
+      <if test="qbDelete != null" >
+        #{qbDelete,jdbcType=BIT},
+      </if>
+      <if test="qbVersion != null" >
+        #{qbVersion,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pctc.model.QuestionBnakExample" resultType="java.lang.Integer" >
+    select count(*) from question_bank
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update question_bank
+    <set >
+      <if test="record.qbId != null" >
+        qb_id = #{record.qbId,jdbcType=BIGINT},
+      </if>
+      <if test="record.qbCcid != null" >
+        qb_ccid = #{record.qbCcid,jdbcType=BIGINT},
+      </if>
+      <if test="record.qbQtid != null" >
+        qb_qtid = #{record.qbQtid,jdbcType=BIGINT},
+      </if>
+      <if test="record.qbInsid != null" >
+        qb_insid = #{record.qbInsid,jdbcType=BIGINT},
+      </if>
+      <if test="record.qbContent != null" >
+        qb_content = #{record.qbContent,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qbOptionsA != null" >
+        qb_options_a = #{record.qbOptionsA,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qbOptionsB != null" >
+        qb_options_b = #{record.qbOptionsB,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qbOptionsC != null" >
+        qb_options_c = #{record.qbOptionsC,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qbOptionsD != null" >
+        qb_options_d = #{record.qbOptionsD,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qbImageUrl != null" >
+        qb_image_url = #{record.qbImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qbAnswer != null" >
+        qb_answer = #{record.qbAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qbCreateBy != null" >
+        qb_create_by = #{record.qbCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qbCreateTime != null" >
+        qb_create_time = #{record.qbCreateTime,jdbcType=DATE},
+      </if>
+      <if test="record.qbModifyBy != null" >
+        qb_modify_by = #{record.qbModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.qbModifyTime != null" >
+        qb_modify_time = #{record.qbModifyTime,jdbcType=DATE},
+      </if>
+      <if test="record.qbDelete != null" >
+        qb_delete = #{record.qbDelete,jdbcType=BIT},
+      </if>
+      <if test="record.qbVersion != null" >
+        qb_version = #{record.qbVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update question_bank
+    set qb_id = #{record.qbId,jdbcType=BIGINT},
+      qb_ccid = #{record.qbCcid,jdbcType=BIGINT},
+      qb_qtid = #{record.qbQtid,jdbcType=BIGINT},
+      qb_insid = #{record.qbInsid,jdbcType=BIGINT},
+      qb_content = #{record.qbContent,jdbcType=VARCHAR},
+      qb_options_a = #{record.qbOptionsA,jdbcType=VARCHAR},
+      qb_options_b = #{record.qbOptionsB,jdbcType=VARCHAR},
+      qb_options_c = #{record.qbOptionsC,jdbcType=VARCHAR},
+      qb_options_d = #{record.qbOptionsD,jdbcType=VARCHAR},
+      qb_image_url = #{record.qbImageUrl,jdbcType=VARCHAR},
+      qb_answer = #{record.qbAnswer,jdbcType=VARCHAR},
+      qb_create_by = #{record.qbCreateBy,jdbcType=VARCHAR},
+      qb_create_time = #{record.qbCreateTime,jdbcType=DATE},
+      qb_modify_by = #{record.qbModifyBy,jdbcType=VARCHAR},
+      qb_modify_time = #{record.qbModifyTime,jdbcType=DATE},
+      qb_delete = #{record.qbDelete,jdbcType=BIT},
+      qb_version = #{record.qbVersion,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pctc.model.QuestionBnak" >
+    update question_bank
+    <set >
+      <if test="qbCcid != null" >
+        qb_ccid = #{qbCcid,jdbcType=BIGINT},
+      </if>
+      <if test="qbQtid != null" >
+        qb_qtid = #{qbQtid,jdbcType=BIGINT},
+      </if>
+      <if test="qbInsid != null" >
+        qb_insid = #{qbInsid,jdbcType=BIGINT},
+      </if>
+      <if test="qbContent != null" >
+        qb_content = #{qbContent,jdbcType=VARCHAR},
+      </if>
+      <if test="qbOptionsA != null" >
+        qb_options_a = #{qbOptionsA,jdbcType=VARCHAR},
+      </if>
+      <if test="qbOptionsB != null" >
+        qb_options_b = #{qbOptionsB,jdbcType=VARCHAR},
+      </if>
+      <if test="qbOptionsC != null" >
+        qb_options_c = #{qbOptionsC,jdbcType=VARCHAR},
+      </if>
+      <if test="qbOptionsD != null" >
+        qb_options_d = #{qbOptionsD,jdbcType=VARCHAR},
+      </if>
+      <if test="qbImageUrl != null" >
+        qb_image_url = #{qbImageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="qbAnswer != null" >
+        qb_answer = #{qbAnswer,jdbcType=VARCHAR},
+      </if>
+      <if test="qbCreateBy != null" >
+        qb_create_by = #{qbCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="qbCreateTime != null" >
+        qb_create_time = #{qbCreateTime,jdbcType=DATE},
+      </if>
+      <if test="qbModifyBy != null" >
+        qb_modify_by = #{qbModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="qbModifyTime != null" >
+        qb_modify_time = #{qbModifyTime,jdbcType=DATE},
+      </if>
+      <if test="qbDelete != null" >
+        qb_delete = #{qbDelete,jdbcType=BIT},
+      </if>
+      <if test="qbVersion != null" >
+        qb_version = #{qbVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    where qb_id = #{qbId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pctc.model.QuestionBnak" >
+    update question_bank
+    set qb_ccid = #{qbCcid,jdbcType=BIGINT},
+      qb_qtid = #{qbQtid,jdbcType=BIGINT},
+      qb_insid = #{qbInsid,jdbcType=BIGINT},
+      qb_content = #{qbContent,jdbcType=VARCHAR},
+      qb_options_a = #{qbOptionsA,jdbcType=VARCHAR},
+      qb_options_b = #{qbOptionsB,jdbcType=VARCHAR},
+      qb_options_c = #{qbOptionsC,jdbcType=VARCHAR},
+      qb_options_d = #{qbOptionsD,jdbcType=VARCHAR},
+      qb_image_url = #{qbImageUrl,jdbcType=VARCHAR},
+      qb_answer = #{qbAnswer,jdbcType=VARCHAR},
+      qb_create_by = #{qbCreateBy,jdbcType=VARCHAR},
+      qb_create_time = #{qbCreateTime,jdbcType=DATE},
+      qb_modify_by = #{qbModifyBy,jdbcType=VARCHAR},
+      qb_modify_time = #{qbModifyTime,jdbcType=DATE},
+      qb_delete = #{qbDelete,jdbcType=BIT},
+      qb_version = #{qbVersion,jdbcType=INTEGER}
+    where qb_id = #{qbId,jdbcType=BIGINT}
+  </update>
+</mapper>

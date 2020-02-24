@@ -1,0 +1,32 @@
+package com.pctc.action;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+import com.pctc.model.Student;
+import com.pctc.model.StudentExample;
+import com.pctc.service.StudentService;
+
+@Controller
+@RequestMapping("/student1")
+public class StudentAction {
+	
+
+	@Autowired
+	private StudentService studentService;
+	
+	//查询学生信息
+			@RequestMapping("/students")
+			public String getStdudents(Map<String, Object> map) {
+				StudentExample studentExample = null;
+				List<Student> students = studentService.getStudent(studentExample);
+				map.put("students", students);
+				return "studentList";
+			}
+			
+
+}

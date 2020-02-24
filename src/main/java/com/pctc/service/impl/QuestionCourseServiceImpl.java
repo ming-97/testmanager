@@ -1,0 +1,53 @@
+package com.pctc.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.pctc.dao.QuestionCourseMapper;
+import com.pctc.model.QuestionCourse;
+import com.pctc.model.QuestionCourseExample;
+import com.pctc.service.QuestionCourseService;
+/**
+ * 
+ * @author zw
+ *
+ */
+@Service("questionCourseService")
+@Transactional
+public class QuestionCourseServiceImpl implements QuestionCourseService{
+
+	@Autowired
+	private QuestionCourseMapper questionCourseMapper;
+	 
+	
+	//添加课程练习题目
+	public int insertQuestionCourse(QuestionCourse qCourse) {
+		int count=questionCourseMapper.insertSelective(qCourse);
+		return count;
+	}
+
+	
+	//查询所有课程练习题目
+	@Transactional(readOnly=true)
+	public List<QuestionCourse> selectAllQuestionCourse(QuestionCourseExample example) {
+		List<QuestionCourse> list =questionCourseMapper.selectByExample(example);
+		return list;
+	}
+
+	//根据id查询课程练习信息
+	@Transactional(readOnly=true)
+	public QuestionCourse selectQuestionCourseById(QuestionCourse qCourse) {
+		QuestionCourse qCourse1=questionCourseMapper.selectByPrimaryKey(qCourse.getQcId());
+		return qCourse1;
+	}
+
+	//根据id修改课程练习
+	public int updateQuestionCourse(QuestionCourse qCourse) {
+		int count=questionCourseMapper.updateByPrimaryKeySelective(qCourse);
+		return count;
+	}
+
+}

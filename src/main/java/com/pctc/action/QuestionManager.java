@@ -1,0 +1,240 @@
+package com.pctc.action;
+
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+
+import javax.servlet.http.HttpServletRequest;
+
+
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.stereotype.Controller;
+
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
+
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
+import com.pctc.model.CourseChapter;
+import com.pctc.model.QuestionBnak;
+import com.pctc.model.QuestionBnakExample;
+
+import com.pctc.model.QuestionDaily;
+import com.pctc.model.QuestionDailyExample;
+import com.pctc.model.QuestionPaper;
+import com.pctc.model.QuestionBnakExample.Criteria;
+
+import com.pctc.model.QuestionType;
+import com.pctc.model.QuestionTypeExample;
+import com.pctc.model.Teacher;
+import com.pctc.service.CourseChapterService;
+import com.pctc.service.QuestionBankService;
+import com.pctc.service.QuestionDailyService;
+import com.pctc.service.QuestionPaperService;
+import com.pctc.service.QuestionTypeService;
+
+@Controller
+@RequestMapping("question")
+@SessionAttributes(value={"teacher"}, types={String.class})
+public class QuestionManager {
+	
+
+
+	
+	//注入题库service
+	@Autowired
+	private QuestionBankService questionBankService;
+	
+	//注入题型service
+	@Autowired
+	private QuestionTypeService questionTypeService;
+	
+	
+	@Autowired
+	private QuestionDailyService questionDailyService;
+	
+	@Autowired
+	private CourseChapterService courseChapterService;
+	
+	
+
+	
+	
+
+	// 接受页面的qdaily对象，添加入库
+	@RequestMapping("insertQuestion")
+	public String addQiestion(QuestionBnak qBnak, Map<String, Object> map, @RequestParam("file") MultipartFile file,
+			HttpServletRequest request,QuestionType qType,CourseChapter chapter) {
+		if (qBnak != null&&qType!=null) {
+			String path = request.getSession().getServletContext().getRealPath("upload");
+			String fileName = file.getOriginalFilename();
+			qBnak.setQbImageUrl(path);
+			qBnak.setQbCreateTime(new Date());
+			qBnak.setQbDelete(false);
+			Teacher teacher=(Teacher)map.get("teacher");//获取session中的值
+			qBnak.setQbCreateBy(teacher.gettUsername());
+			chapter=courseChapterService.selectCourseChapterByName(chapter.getCcName());
+			qBnak.setQbCcid(chapter.getCcCid());//将查找的章节id赋给qBnak
+			qType=questionTypeService.getQuestionTypeName(qType.getQtName());
+			qBnak.setQbQtid(qType.getQtId());//将查找的题目类型编号赋值给qBnak
+			questionBankService.insertQuestion(qBnak);			
+		}
+		String ss = "添加成功";
+		map.put("info", ss);
+		return "forward:../returnPage/toQuestionInfo";// 转发给查询action
+	}
+
+	// 查询所有的题库题目，分页显示
+	@RequestMapping("selectAllQuestion")
+	public String selectAllQuestion(Map<String , Object> map, @RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum) {
+		Page<QuestionBnak> page = PageHelper.startPage(pageNum, 3);// 一定要在分页查询之前
+		QuestionBnakExample qBnakExample = new QuestionBnakExample();
+		Criteria criteria = qBnakExample.createCriteria();
+		criteria.andQbDeleteEqualTo(false);
+		List<QuestionBnak> questionBnaks = questionBankService.selectAllQuestion(qBnakExample);
+		PageInfo<QuestionBnak> pageInfo = new PageInfo<QuestionBnak>(questionBnaks, 5);
+		map.put("questionBnak", questionBnaks);
+		map.put("pageInfo", pageInfo);
+		return "question/questionbankmanager";
+	}
+
+
+
+	// 对题目进行修改 入库并并返回查询页面
+	@RequestMapping("updateQuestionBnak")
+	public String updateQuestionBank(QuestionBnak qBnak, @RequestParam("file") MultipartFile file,
+			HttpServletRequest request,QuestionType qType,Map<String,Object> map,CourseChapter chapter) {
+		if (qBnak != null) {
+			String path = request.getSession().getServletContext().getRealPath("upload");
+			String fileName = file.getOriginalFilename();
+			qBnak.setQbImageUrl(path);
+			qBnak.setQbModifyTime(new Date());
+			qBnak.setQbDelete(false);
+			Teacher teacher=(Teacher)map.get("teacher");//获取session中的值
+			qBnak.setQbModifyBy(teacher.gettUsername());
+			chapter=courseChapterService.selectCourseChapterByName(chapter.getCcName());
+			qBnak.setQbCcid(chapter.getCcCid());//将查找的章节id赋给qBnak
+			qType=questionTypeService.getQuestionTypeName(qType.getQtName());
+			qBnak.setQbQtid(qType.getQtId());
+			questionBankService.updateQuestionBnak(qBnak);
+		}
+		return "forward:../returnPage/toQuestionInfo";// 修改完成返回 查询的action
+	}
+	
+	
+	//根据id删除题库题目
+	@ResponseBody
+	@RequestMapping("deleteQuestionBnak")
+	public int  delectQuestionBnak(QuestionBnak qBnak){
+		int count =0;
+			int i=questionBankService.deleteQuestionBnak(qBnak);
+			if(i>0){
+				count =1;
+			}
+			else {
+				count =0;
+			}
+		return count;
+	}
+	
+	
+	
+	
+	
+
+	//1.3 答题信息入库操作
+	@RequestMapping("questionDailyFormInfo")
+	public String dailySuccess(HttpServletRequest request){
+		long qdId=Long.parseLong(request.getParameter("qdId"));
+		
+		QuestionDaily questionDaily=new QuestionDaily();
+		
+		questionDaily=questionDailyService.getQuestionDailyById(qdId);
+		String qdIds[]=questionDaily.getQdQbid().split(",");
+		List<QuestionPaper> questionPaperList=new ArrayList<QuestionPaper>();
+		
+		for(int i=0;i<qdIds.length;i++){
+			QuestionPaper questionPaper=new QuestionPaper();
+			
+		}
+		return "questionInfoSuccess";
+	}
+	
+	
+	//按题目内容从查询题目
+	//@ResponseBody
+	@RequestMapping("selectQuestionByName")
+	public String selectQuesitonByName(Map<String, Object> map,QuestionBnak qBnak,@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum){
+		Page<QuestionBnak> page = PageHelper.startPage(pageNum, 3);// 一定要在分页查询之前
+		QuestionBnakExample example=new QuestionBnakExample();
+		Criteria criteria=example.createCriteria();
+		criteria.andQbContentLike("%"+qBnak.getQbContent()+"%");
+		criteria.andQbDeleteEqualTo(false);
+		List<QuestionBnak> list=questionBankService.selectAllQuestion(example);
+		PageInfo<QuestionBnak> pageInfo = new PageInfo<QuestionBnak>(list, 5);
+		map.put("pageInfo", pageInfo);
+		map.put("questionBnak", list);
+		return "question/questionbankmanager";
+	}
+	
+	//每日一练查询添加
+	@RequestMapping("selectQuestionByNamefordailyadd")
+	public String selectQuesitonByNamedaily(Map<String, Object> map,QuestionBnak qBnak,@RequestParam(value = "pageNum", defaultValue = "1") Integer pageNum){
+		Page<QuestionBnak> page = PageHelper.startPage(pageNum, 3);// 一定要在分页查询之前
+		QuestionBnakExample example=new QuestionBnakExample();
+		Criteria criteria=example.createCriteria();
+		criteria.andQbContentLike("%"+qBnak.getQbContent()+"%");
+		criteria.andQbDeleteEqualTo(false);
+		List<QuestionBnak> list=questionBankService.selectAllQuestion(example);
+		PageInfo<QuestionBnak> pageInfo = new PageInfo<QuestionBnak>(list, 5);
+		map.put("pageInfo", pageInfo);
+		map.put("qBnaks", list);
+		return "question/questiondailyadd";
+	}
+
+	
+	@RequestMapping("selectQuestionByNameToPage")
+	public String selectQuesitonByNameToPage(Map<String, Object> map,QuestionBnak qBnak){
+		QuestionBnakExample example=new QuestionBnakExample();
+		Criteria criteria=example.createCriteria();
+		criteria.andQbContentLike("%"+qBnak.getQbContent()+"%");
+		criteria.andQbDeleteEqualTo(false);
+		List<QuestionBnak> list=questionBankService.selectAllQuestion(example);
+		map.put("questionBnak", list);
+		return "question/questionContent";
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
+	//初始化时间函数
+	@InitBinder
+	public void initBinder(WebDataBinder binder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		dateFormat.setLenient(false);
+		binder.registerCustomEditor(Date.class, new CustomDateEditor(
+				dateFormat, false));
+		       //true:允许输入空值，false:不能为空值    
+	}
+	
+
+}

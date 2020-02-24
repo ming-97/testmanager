@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pctc.dao.PermissionsMapper" >
+  <resultMap id="BaseResultMap" type="com.pctc.model.Permissions" >
+    <id column="p_id" property="pId" jdbcType="BIGINT" />
+    <result column="p_insid" property="pInsid" jdbcType="BIGINT" />
+    <result column="p_permission_no" property="pPermissionNo" jdbcType="VARCHAR" />
+    <result column="p_url" property="pUrl" jdbcType="VARCHAR" />
+    <result column="p_create_by" property="pCreateBy" jdbcType="VARCHAR" />
+    <result column="p_create_time" property="pCreateTime" jdbcType="DATE" />
+    <result column="p_modify_by" property="pModifyBy" jdbcType="VARCHAR" />
+    <result column="p_modufy_time" property="pModufyTime" jdbcType="DATE" />
+    <result column="p_delete" property="pDelete" jdbcType="BIT" />
+    <result column="p_version" property="pVersion" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    p_id, p_insid, p_permission_no, p_url, p_create_by, p_create_time, p_modify_by, p_modufy_time, 
+    p_delete, p_version
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pctc.model.PermissionsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from permissions
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from permissions
+    where p_id = #{pId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from permissions
+    where p_id = #{pId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pctc.model.PermissionsExample" >
+    delete from permissions
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pctc.model.Permissions" >
+    insert into permissions (p_id, p_insid, p_permission_no, 
+      p_url, p_create_by, p_create_time, 
+      p_modify_by, p_modufy_time, p_delete, 
+      p_version)
+    values (#{pId,jdbcType=BIGINT}, #{pInsid,jdbcType=BIGINT}, #{pPermissionNo,jdbcType=VARCHAR}, 
+      #{pUrl,jdbcType=VARCHAR}, #{pCreateBy,jdbcType=VARCHAR}, #{pCreateTime,jdbcType=DATE}, 
+      #{pModifyBy,jdbcType=VARCHAR}, #{pModufyTime,jdbcType=DATE}, #{pDelete,jdbcType=BIT}, 
+      #{pVersion,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pctc.model.Permissions" >
+    insert into permissions
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="pId != null" >
+        p_id,
+      </if>
+      <if test="pInsid != null" >
+        p_insid,
+      </if>
+      <if test="pPermissionNo != null" >
+        p_permission_no,
+      </if>
+      <if test="pUrl != null" >
+        p_url,
+      </if>
+      <if test="pCreateBy != null" >
+        p_create_by,
+      </if>
+      <if test="pCreateTime != null" >
+        p_create_time,
+      </if>
+      <if test="pModifyBy != null" >
+        p_modify_by,
+      </if>
+      <if test="pModufyTime != null" >
+        p_modufy_time,
+      </if>
+      <if test="pDelete != null" >
+        p_delete,
+      </if>
+      <if test="pVersion != null" >
+        p_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="pId != null" >
+        #{pId,jdbcType=BIGINT},
+      </if>
+      <if test="pInsid != null" >
+        #{pInsid,jdbcType=BIGINT},
+      </if>
+      <if test="pPermissionNo != null" >
+        #{pPermissionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="pUrl != null" >
+        #{pUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="pCreateBy != null" >
+        #{pCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="pCreateTime != null" >
+        #{pCreateTime,jdbcType=DATE},
+      </if>
+      <if test="pModifyBy != null" >
+        #{pModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="pModufyTime != null" >
+        #{pModufyTime,jdbcType=DATE},
+      </if>
+      <if test="pDelete != null" >
+        #{pDelete,jdbcType=BIT},
+      </if>
+      <if test="pVersion != null" >
+        #{pVersion,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pctc.model.PermissionsExample" resultType="java.lang.Integer" >
+    select count(*) from permissions
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update permissions
+    <set >
+      <if test="record.pId != null" >
+        p_id = #{record.pId,jdbcType=BIGINT},
+      </if>
+      <if test="record.pInsid != null" >
+        p_insid = #{record.pInsid,jdbcType=BIGINT},
+      </if>
+      <if test="record.pPermissionNo != null" >
+        p_permission_no = #{record.pPermissionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pUrl != null" >
+        p_url = #{record.pUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pCreateBy != null" >
+        p_create_by = #{record.pCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pCreateTime != null" >
+        p_create_time = #{record.pCreateTime,jdbcType=DATE},
+      </if>
+      <if test="record.pModifyBy != null" >
+        p_modify_by = #{record.pModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pModufyTime != null" >
+        p_modufy_time = #{record.pModufyTime,jdbcType=DATE},
+      </if>
+      <if test="record.pDelete != null" >
+        p_delete = #{record.pDelete,jdbcType=BIT},
+      </if>
+      <if test="record.pVersion != null" >
+        p_version = #{record.pVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update permissions
+    set p_id = #{record.pId,jdbcType=BIGINT},
+      p_insid = #{record.pInsid,jdbcType=BIGINT},
+      p_permission_no = #{record.pPermissionNo,jdbcType=VARCHAR},
+      p_url = #{record.pUrl,jdbcType=VARCHAR},
+      p_create_by = #{record.pCreateBy,jdbcType=VARCHAR},
+      p_create_time = #{record.pCreateTime,jdbcType=DATE},
+      p_modify_by = #{record.pModifyBy,jdbcType=VARCHAR},
+      p_modufy_time = #{record.pModufyTime,jdbcType=DATE},
+      p_delete = #{record.pDelete,jdbcType=BIT},
+      p_version = #{record.pVersion,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pctc.model.Permissions" >
+    update permissions
+    <set >
+      <if test="pInsid != null" >
+        p_insid = #{pInsid,jdbcType=BIGINT},
+      </if>
+      <if test="pPermissionNo != null" >
+        p_permission_no = #{pPermissionNo,jdbcType=VARCHAR},
+      </if>
+      <if test="pUrl != null" >
+        p_url = #{pUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="pCreateBy != null" >
+        p_create_by = #{pCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="pCreateTime != null" >
+        p_create_time = #{pCreateTime,jdbcType=DATE},
+      </if>
+      <if test="pModifyBy != null" >
+        p_modify_by = #{pModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="pModufyTime != null" >
+        p_modufy_time = #{pModufyTime,jdbcType=DATE},
+      </if>
+      <if test="pDelete != null" >
+        p_delete = #{pDelete,jdbcType=BIT},
+      </if>
+      <if test="pVersion != null" >
+        p_version = #{pVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    where p_id = #{pId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pctc.model.Permissions" >
+    update permissions
+    set p_insid = #{pInsid,jdbcType=BIGINT},
+      p_permission_no = #{pPermissionNo,jdbcType=VARCHAR},
+      p_url = #{pUrl,jdbcType=VARCHAR},
+      p_create_by = #{pCreateBy,jdbcType=VARCHAR},
+      p_create_time = #{pCreateTime,jdbcType=DATE},
+      p_modify_by = #{pModifyBy,jdbcType=VARCHAR},
+      p_modufy_time = #{pModufyTime,jdbcType=DATE},
+      p_delete = #{pDelete,jdbcType=BIT},
+      p_version = #{pVersion,jdbcType=INTEGER}
+    where p_id = #{pId,jdbcType=BIGINT}
+  </update>
+</mapper>

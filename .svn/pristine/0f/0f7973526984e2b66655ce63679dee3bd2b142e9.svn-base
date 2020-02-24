@@ -1,0 +1,506 @@
+<%@page import="java.util.Map"%>
+<%@page import="com.pctc.model.QuestionCourse"%>
+<%@page import="com.pctc.model.QuestionType"%>
+<%@ page language="java" contentType="text/html; charset=utf-8"  pageEncoding="utf-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%
+String path = request.getContextPath();
+String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
+pageContext.setAttribute("webpath", path);
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+ <base href="<%=basePath%>">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>课程练习</title>
+</head>
+<link href="static/css/main.css" rel="stylesheet" type="text/css" />
+<link href="static/css/iconfont.css" rel="stylesheet" type="text/css" />
+<link href="static/css/test.css" rel="stylesheet" type="text/css" />
+<style type="text/css">
+.hasBeenAnswer {
+			background: #5d9cec;
+			color:#fff;
+		}
+
+</style>
+
+<script type="text/javascript" src="static/js/jquery-1.8.3.js"></script>
+<script type="text/javascript">
+$(document).ready(
+function doAjax(){
+
+ $("#qpName").blur(
+ 
+	    function()
+	    {	
+	    	
+	    //真实场景下的ajax调用		
+		$.ajax(
+	    			{
+	    				
+	    		  url: "questionCoursePaper/questionCourseFormInfo1",
+	    		  
+	    		  cache: false,
+	    		  
+	    		  type: "GET",
+	    		  
+	    		  dataType:"json",
+	    		  
+	    		  async: true,
+	    		  
+         		  data: {qpName:$("#qpName").val()},
+         		  
+	    		  success:function(msg){ 
+	    		     
+	    		     //业务代码，改变页面的数据		     
+	    		    // alert(msg);
+	    		     
+	    		     if (msg==true)
+	    		     {
+	    		      $("#qpSid").focus();
+	    		      $("#tip").text("此试卷名称已存在！");
+	    		      $("#qpName").focus();
+	    		     }  
+	    		   }, 
+	    		  error:function(errordata){
+	   				alert("wrong!!"+errordata);
+	   			   } 
+	    		});
+	    });	    
+}
+);
+
+
+
+</script> 
+
+
+
+<body>
+<% 
+int i=0;
+int i1=0;
+int j=0;
+int j1=0;
+int k=0;
+int k1=0;
+QuestionCourse questionCourse=(QuestionCourse)request.getAttribute("questionCourse"); 
+QuestionType questionType1=(QuestionType)request.getAttribute("questionType1");
+QuestionType questionType2=(QuestionType)request.getAttribute("questionType2");
+QuestionType questionType3=(QuestionType)request.getAttribute("questionType3");
+%>
+
+<div class="main">
+		<!--nr start-->
+		<div class="test_main">
+			<div class="nr_left">
+				<div class="test">
+					<form action="questionCoursePaper/questionCourseFormInfo" method="post">
+						<div class="test_title">
+							<p class="test_time">
+								<i class="icon iconfont">&#xe6fb;</i><b class="alt-1">01:30</b>
+							</p>
+							
+							<font><input type="submit" name="test_jiaojuan" id="test_jiaojuan" value="交卷"></font>
+						</div>
+						<h1 align="center" style="color:red;text-shadow: 2px 2px 2px black;font-size:30px" >${course.cName}课程测试</h1><br>
+						<a style="padding-left:200px;color:blue;font-size:15px">请输入试卷名称唯一标识：</a><input type="text" name="qpName" id="qpName" value="${course.cName}课程测试"><span id="tip" style="color:red"></span><br/>
+                       
+						
+					<input type="hidden" value="<%=questionCourse.getQcInsid() %>" name="qcInsid">
+                    <input type="hidden" value="<%=questionCourse.getQcId() %>" name="qcId">
+						
+							<div class="test_content">
+								<div class="test_content_title">
+									<h2>选择题</h2>
+									<p>
+										<span>共</span><i class="content_lit">30</i><span>题，</span><span>合计</span><i class="content_fs"><%=questionType1.getQtGrade()*30%></i><span>分</span>
+									</p>
+								</div>
+							</div>
+							<div class="test_content_nr">
+								<ul>
+								
+								
+									<c:forEach items="${questionBnakList1}" var="questionBank1">
+                                    <input type="hidden" value="${questionBank1.qbId}" name="qpQbId">
+                                    <input type="hidden" value=" <%=i=i+1 %>">
+                                    <input type="hidden" value=" <%=i1=i %>">
+                                   
+                                                                      
+										<li id="qu_0_<%=i1 %>">
+											<div class="test_content_nr_tt">
+												<i><%=i1 %></i><span>(<%=questionType1.getQtGrade()%>分)</span><font>${questionBank1.qbContent}</font><b class="icon iconfont">&#xe881;</b>
+											</div>
+
+											<div class="test_content_nr_main">
+												<ul>
+													
+														<li class="option">
+															
+																<input type="radio" class="radioOrCheck" name="${questionBank1.qbId}"
+																	id="0_answer_<%=i1 %>_option_1" value="A"
+																/>
+															
+															
+															<label for="0_answer_<%=i1 %>_option_1">
+																A.
+																<p class="ue" style="display: inline;">${questionBank1.qbOptionsA}</p>
+															</label>
+														</li>
+													
+														<li class="option">
+															
+																<input type="radio" class="radioOrCheck" name="${questionBank1.qbId}"
+																	id="0_answer_<%=i1 %>_option_2"  value="B"
+																/>
+															
+															
+															<label for="0_answer_<%=i1 %>_option_2">
+																B.
+																<p class="ue" style="display: inline;">${questionBank1.qbOptionsB}</p>
+															</label>
+														</li>
+													
+														<li class="option">
+															
+																<input type="radio" class="radioOrCheck" name="${questionBank1.qbId}"
+																	id="0_answer_<%=i1 %>_option_3"  value="C"
+																/>
+															
+															
+															<label for="0_answer_<%=i1 %>_option_3">
+																C.
+																<p class="ue" style="display: inline;">${questionBank1.qbOptionsC}</p>
+															</label>
+														</li>
+													
+														<li class="option">
+															
+																<input type="radio" class="radioOrCheck" name="${questionBank1.qbId}"
+																	id="0_answer_<%=i1 %>_option_4"  value="D"
+																/>
+															
+															
+															<label for="0_answer_<%=i1 %>_option_4">
+																D.
+																<p class="ue" style="display: inline;">${questionBank1.qbOptionsD}</p>
+															</label>
+														</li>
+													
+												</ul>
+											</div>
+										</li>
+										
+										</c:forEach>
+										</ul>
+							</div>	
+										
+										
+										
+										
+										
+										
+									
+										
+						
+							<div class="test_content">
+								<div class="test_content_title">
+									<h2>判断题</h2>
+									<p>
+										<span>共</span><i class="content_lit">10</i><span>题，</span><span>合计</span><i class="content_fs"><%=questionType2.getQtGrade()*10%></i><span>分</span>
+									</p>
+								</div>
+							</div>
+							<div class="test_content_nr">
+								<ul>
+									<c:forEach items="${questionBnakList3}" var="questionBank3">
+									<input type="hidden" value="${questionBank3.qbId}" name="qpQbId">
+                                    <input type="hidden" value=" <%=j=j+1 %>">
+                                    <input type="hidden" value=" <%=j1=j %>">
+										<li id="qu_1_<%=j1 %>">
+											<div class="test_content_nr_tt">
+												<i><%=j1 %></i><span>(<%=questionType2.getQtGrade()%>分)</span><font>${questionBank3.qbContent}</font><b class="icon iconfont">&#xe881;</b>
+											</div>
+
+											<div class="test_content_nr_main">
+												<ul>
+											
+											
+														<li class="option">
+																<input type="radio" class="radioOrCheck" name="${questionBank3.qbId}"
+																	id="1_answer_<%=j1 %>_option_1" value="是"
+																/>
+
+															<label for="1_answer_<%=j1 %>_option_1">
+																
+																<p class="ue" style="display: inline;">是</p>
+															</label>
+														</li>
+
+														<li class="option">
+
+
+																<input type="radio" class="radioOrCheck" name="${questionBank3.qbId}"
+																	id="1_answer_<%=j1 %>_option_2" value="不是"
+																/>
+
+															<label for="1_answer_<%=j1 %>_option_2">
+																
+																<p class="ue" style="display: inline;">不是</p>
+															</label>
+														</li>
+													
+
+												</ul>
+											</div>
+										</li>
+									</c:forEach>
+								</ul>
+							</div>
+
+
+
+
+
+
+
+
+                        <div class="test_content">
+                            <div class="test_content_title">
+                                <h2>填空题</h2>
+                                <p>
+                                    <span>共</span><i class="content_lit">10</i><span>题，</span><span>合计</span><i class="content_fs"><%=questionType3.getQtGrade()*10%></i><span>分</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="test_content_nr">
+                            <ul>
+                            
+                            <c:forEach items="${questionBnakList2}" var="questionBank2">
+                            <input type="hidden" value="${questionBank2.qbId}" name="qpQbId">
+                            <input type="hidden" value=" <%=k=k+1 %>">
+                            <input type="hidden" value=" <%=k1=k %>">
+
+                                <li id="qu_2_<%=k1 %>">
+                                    <div class="test_content_nr_tt">
+                                        <i><%=k1 %></i><span>(<%=questionType2.getQtGrade()%>分)</span><font>${questionBank2.qbContent}</font><b class="icon iconfont">&#xe881;</b>
+                                    </div>
+
+                                    <div class="test_content_nr_main">
+                                        <ul>
+                                            <li class="option">
+                                                    <textarea  style="display: inline; " name="${questionBank2.qbId}" id="2_answer_<%=k1 %>_option_1" ></textarea>
+                                                    <label style="color:red;">(填写时请检查答案中是否含有空格！！！若有多个答案中间用空格隔开！！！)</label>
+                                                    
+                                                    
+                                                    
+                                               <label for="2_answer_<%=k1 %>_option_1">
+																
+																
+											   </label>
+                                            </li>
+
+
+                                        </ul>
+                                    </div>
+                                </li>
+                                </c:forEach>
+
+
+
+                            </ul>
+                        </div>
+						
+					</form>
+				</div>
+
+			</div>
+			<div class="nr_right">
+				<div class="nr_rt_main">
+					<div class="rt_nr1">
+						<div class="rt_nr1_title">
+							<h1>
+								<i class="icon iconfont">&#xe692;</i>答题卡
+							</h1>
+							<p class="test_time">
+								<i class="icon iconfont">&#xe6fb;</i><b class="alt-1">01:30</b>
+							</p>
+						</div>
+						
+							<div class="rt_content">
+								<div class="rt_content_tt">
+									<h2>单选题</h2>
+									<p>
+										<span>共</span><i class="content_lit">30</i><span>题</span>
+									</p>
+								</div>
+								<div class="rt_content_nr answerSheet">
+									<ul>
+										
+											<li><a href="#qu_0_1">1</a></li>
+										
+											<li><a href="#qu_0_2">2</a></li>
+										
+											<li><a href="#qu_0_3">3</a></li>
+										
+											<li><a href="#qu_0_4">4</a></li>
+										
+											<li><a href="#qu_0_5">5</a></li>
+										
+											<li><a href="#qu_0_6">6</a></li>
+										
+											<li><a href="#qu_0_7">7</a></li>
+										
+											<li><a href="#qu_0_8">8</a></li>
+										
+											<li><a href="#qu_0_9">9</a></li>
+										
+											<li><a href="#qu_0_10">10</a></li>
+										
+											<li><a href="#qu_0_11">11</a></li>
+										
+											<li><a href="#qu_0_12">12</a></li>
+										
+											<li><a href="#qu_0_13">13</a></li>
+										
+											<li><a href="#qu_0_14">14</a></li>
+										
+											<li><a href="#qu_0_15">15</a></li>
+										
+											<li><a href="#qu_0_16">16</a></li>
+										
+											<li><a href="#qu_0_17">17</a></li>
+										
+											<li><a href="#qu_0_18">18</a></li>
+										
+											<li><a href="#qu_0_19">19</a></li>
+										
+											<li><a href="#qu_0_20">20</a></li>
+										
+											<li><a href="#qu_0_21">21</a></li>
+										
+											<li><a href="#qu_0_22">22</a></li>
+										
+											<li><a href="#qu_0_23">23</a></li>
+										
+											<li><a href="#qu_0_24">24</a></li>
+										
+											<li><a href="#qu_0_25">25</a></li>
+										
+											<li><a href="#qu_0_26">26</a></li>
+										
+											<li><a href="#qu_0_27">27</a></li>
+										
+											<li><a href="#qu_0_28">28</a></li>
+										
+											<li><a href="#qu_0_29">29</a></li>
+										
+											<li><a href="#qu_0_30">30</a></li>
+										
+									</ul>
+								</div>
+							</div>
+						
+							<div class="rt_content">
+								<div class="rt_content_tt">
+									<h2>判断题</h2>
+									<p>
+										<span>共</span><i class="content_lit">10</i><span>题</span>
+									</p>
+								</div>
+								<div class="rt_content_nr answerSheet">
+									<ul>
+										
+											<li><a href="#qu_1_1">1</a></li>
+										
+											<li><a href="#qu_1_2">2</a></li>
+										
+											<li><a href="#qu_1_3">3</a></li>
+										
+											<li><a href="#qu_1_4">4</a></li>
+										
+											<li><a href="#qu_1_5">5</a></li>
+										
+											<li><a href="#qu_1_6">6</a></li>
+										
+											<li><a href="#qu_1_7">7</a></li>
+										
+											<li><a href="#qu_1_8">8</a></li>
+										
+											<li><a href="#qu_1_9">9</a></li>
+										
+											<li><a href="#qu_1_10">10</a></li>
+
+									</ul>
+								</div>
+							</div>
+
+            
+					</div>
+
+				</div>
+			</div>
+		</div>
+		<!--nr end-->
+		<div class="foot"></div>
+	</div>
+	
+	
+	<script src="static/js/jquery.easy-pie-chart.js"></script>
+	<!--时间js-->
+<script src="static/js/time/jquery.countdown.js"></script>
+	<script>
+	timedown(5400,function(){
+		//倒计时时间和计时结束触发
+		alert('时间到!!!');
+		//绑定到点击按钮交卷
+		document.getElementById("test_jiaojuan").click();	
+
+	});
+		function timedown(time,callback){
+				$('alt-1').text(formatSeconds(time));
+				var t = setInterval(function(){
+					if(time == 0){
+						clearInterval(t);
+						callback();
+						return;
+					}
+					time--;
+
+					$('.alt-1').text(formatSeconds(time));
+				},1000)
+			}
+
+
+			/**秒数转时:分:秒
+			 * @param {Object} value
+			 */
+			 function formatSeconds(value) {
+					let result = parseInt(value);
+					let h = Math.floor(result / 3600) < 10 ? '0' + Math.floor(result / 3600) : Math.floor(result / 3600);
+					let m = Math.floor((result / 60 % 60)) < 10 ? '0' + Math.floor((result / 60 % 60)) : Math.floor((result / 60 % 60));
+					let s = Math.floor((result % 60)) < 10 ? '0' + Math.floor((result % 60)) : Math.floor((result % 60));
+					result = h+':'+ m+':'+s;
+					return result;
+				}
+		
+		$(function() {
+			$('li.option label').click(function() {
+			debugger;
+				var examId = $(this).closest('.test_content_nr_main').closest('li').attr('id'); // 得到题目ID
+				var cardLi = $('a[href=#' + examId + ']'); // 根据题目ID找到对应答题卡
+				// 设置已答题
+				if(!cardLi.hasClass('hasBeenAnswer')){
+					cardLi.addClass('hasBeenAnswer');
+				}
+				
+			});
+		});
+	</script>
+
+</body>
+</html>

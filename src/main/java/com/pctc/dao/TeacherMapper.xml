@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pctc.dao.TeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.pctc.model.Teacher" >
+    <id column="t_id" property="tId" jdbcType="BIGINT" />
+    <result column="t_insid" property="tInsid" jdbcType="BIGINT" />
+    <result column="t_username" property="tUsername" jdbcType="VARCHAR" />
+    <result column="t_password" property="tPassword" jdbcType="VARCHAR" />
+    <result column="t_create_by" property="tCreateBy" jdbcType="VARCHAR" />
+    <result column="t_create_time" property="tCreateTime" jdbcType="DATE" />
+    <result column="t_modify_by" property="tModifyBy" jdbcType="VARCHAR" />
+    <result column="t_modify_time" property="tModifyTime" jdbcType="DATE" />
+    <result column="t_delete" property="tDelete" jdbcType="BIT" />
+    <result column="t_version" property="tVersion" jdbcType="INTEGER" />
+    <result column="t_permission_no" property="tPermissionNo" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    t_id, t_insid, t_username, t_password, t_create_by, t_create_time, t_modify_by, t_modify_time, 
+    t_delete, t_version, t_permission_no
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pctc.model.TeacherExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from teacher
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from teacher
+    where t_id = #{tId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from teacher
+    where t_id = #{tId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pctc.model.TeacherExample" >
+    delete from teacher
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pctc.model.Teacher" >
+    insert into teacher (t_id, t_insid, t_username, 
+      t_password, t_create_by, t_create_time, 
+      t_modify_by, t_modify_time, t_delete, 
+      t_version, t_permission_no)
+    values (#{tId,jdbcType=BIGINT}, #{tInsid,jdbcType=BIGINT}, #{tUsername,jdbcType=VARCHAR}, 
+      #{tPassword,jdbcType=VARCHAR}, #{tCreateBy,jdbcType=VARCHAR}, #{tCreateTime,jdbcType=DATE}, 
+      #{tModifyBy,jdbcType=VARCHAR}, #{tModifyTime,jdbcType=DATE}, #{tDelete,jdbcType=BIT}, 
+      #{tVersion,jdbcType=INTEGER}, #{tPermissionNo,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.pctc.model.Teacher" >
+    insert into teacher
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tId != null" >
+        t_id,
+      </if>
+      <if test="tInsid != null" >
+        t_insid,
+      </if>
+      <if test="tUsername != null" >
+        t_username,
+      </if>
+      <if test="tPassword != null" >
+        t_password,
+      </if>
+      <if test="tCreateBy != null" >
+        t_create_by,
+      </if>
+      <if test="tCreateTime != null" >
+        t_create_time,
+      </if>
+      <if test="tModifyBy != null" >
+        t_modify_by,
+      </if>
+      <if test="tModifyTime != null" >
+        t_modify_time,
+      </if>
+      <if test="tDelete != null" >
+        t_delete,
+      </if>
+      <if test="tVersion != null" >
+        t_version,
+      </if>
+      <if test="tPermissionNo != null" >
+        t_permission_no,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tId != null" >
+        #{tId,jdbcType=BIGINT},
+      </if>
+      <if test="tInsid != null" >
+        #{tInsid,jdbcType=BIGINT},
+      </if>
+      <if test="tUsername != null" >
+        #{tUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="tPassword != null" >
+        #{tPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="tCreateBy != null" >
+        #{tCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="tCreateTime != null" >
+        #{tCreateTime,jdbcType=DATE},
+      </if>
+      <if test="tModifyBy != null" >
+        #{tModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="tModifyTime != null" >
+        #{tModifyTime,jdbcType=DATE},
+      </if>
+      <if test="tDelete != null" >
+        #{tDelete,jdbcType=BIT},
+      </if>
+      <if test="tVersion != null" >
+        #{tVersion,jdbcType=INTEGER},
+      </if>
+      <if test="tPermissionNo != null" >
+        #{tPermissionNo,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pctc.model.TeacherExample" resultType="java.lang.Integer" >
+    select count(*) from teacher
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update teacher
+    <set >
+      <if test="record.tId != null" >
+        t_id = #{record.tId,jdbcType=BIGINT},
+      </if>
+      <if test="record.tInsid != null" >
+        t_insid = #{record.tInsid,jdbcType=BIGINT},
+      </if>
+      <if test="record.tUsername != null" >
+        t_username = #{record.tUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tPassword != null" >
+        t_password = #{record.tPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tCreateBy != null" >
+        t_create_by = #{record.tCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tCreateTime != null" >
+        t_create_time = #{record.tCreateTime,jdbcType=DATE},
+      </if>
+      <if test="record.tModifyBy != null" >
+        t_modify_by = #{record.tModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.tModifyTime != null" >
+        t_modify_time = #{record.tModifyTime,jdbcType=DATE},
+      </if>
+      <if test="record.tDelete != null" >
+        t_delete = #{record.tDelete,jdbcType=BIT},
+      </if>
+      <if test="record.tVersion != null" >
+        t_version = #{record.tVersion,jdbcType=INTEGER},
+      </if>
+      <if test="record.tPermissionNo != null" >
+        t_permission_no = #{record.tPermissionNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update teacher
+    set t_id = #{record.tId,jdbcType=BIGINT},
+      t_insid = #{record.tInsid,jdbcType=BIGINT},
+      t_username = #{record.tUsername,jdbcType=VARCHAR},
+      t_password = #{record.tPassword,jdbcType=VARCHAR},
+      t_create_by = #{record.tCreateBy,jdbcType=VARCHAR},
+      t_create_time = #{record.tCreateTime,jdbcType=DATE},
+      t_modify_by = #{record.tModifyBy,jdbcType=VARCHAR},
+      t_modify_time = #{record.tModifyTime,jdbcType=DATE},
+      t_delete = #{record.tDelete,jdbcType=BIT},
+      t_version = #{record.tVersion,jdbcType=INTEGER},
+      t_permission_no = #{record.tPermissionNo,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pctc.model.Teacher" >
+    update teacher
+    <set >
+      <if test="tInsid != null" >
+        t_insid = #{tInsid,jdbcType=BIGINT},
+      </if>
+      <if test="tUsername != null" >
+        t_username = #{tUsername,jdbcType=VARCHAR},
+      </if>
+      <if test="tPassword != null" >
+        t_password = #{tPassword,jdbcType=VARCHAR},
+      </if>
+      <if test="tCreateBy != null" >
+        t_create_by = #{tCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="tCreateTime != null" >
+        t_create_time = #{tCreateTime,jdbcType=DATE},
+      </if>
+      <if test="tModifyBy != null" >
+        t_modify_by = #{tModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="tModifyTime != null" >
+        t_modify_time = #{tModifyTime,jdbcType=DATE},
+      </if>
+      <if test="tDelete != null" >
+        t_delete = #{tDelete,jdbcType=BIT},
+      </if>
+      <if test="tVersion != null" >
+        t_version = #{tVersion,jdbcType=INTEGER},
+      </if>
+      <if test="tPermissionNo != null" >
+        t_permission_no = #{tPermissionNo,jdbcType=INTEGER},
+      </if>
+    </set>
+    where t_id = #{tId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pctc.model.Teacher" >
+    update teacher
+    set t_insid = #{tInsid,jdbcType=BIGINT},
+      t_username = #{tUsername,jdbcType=VARCHAR},
+      t_password = #{tPassword,jdbcType=VARCHAR},
+      t_create_by = #{tCreateBy,jdbcType=VARCHAR},
+      t_create_time = #{tCreateTime,jdbcType=DATE},
+      t_modify_by = #{tModifyBy,jdbcType=VARCHAR},
+      t_modify_time = #{tModifyTime,jdbcType=DATE},
+      t_delete = #{tDelete,jdbcType=BIT},
+      t_version = #{tVersion,jdbcType=INTEGER},
+      t_permission_no = #{tPermissionNo,jdbcType=INTEGER}
+    where t_id = #{tId,jdbcType=BIGINT}
+  </update>
+</mapper>

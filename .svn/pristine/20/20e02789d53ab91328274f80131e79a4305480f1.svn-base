@@ -1,0 +1,62 @@
+package com.pctc.action;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import com.pctc.model.Teacher;
+import com.pctc.model.TeacherExample;
+import com.pctc.model.TeacherExample.Criteria;
+import com.pctc.service.TeacherService;
+
+@Controller
+@RequestMapping("/teacherlogin")
+@SessionAttributes(value={"teacher"}, types={String.class})
+public class TeacherLoginAction {
+
+	@Autowired
+	private TeacherService teacherService;
+
+	// µÇÂ¼
+	@RequestMapping(value = "/teacherLogin")
+	public String teacherLogin(Teacher teacher,Map<String, Object> map,HttpServletResponse response) throws IOException {
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+		TeacherExample teacherExample = new TeacherExample();
+		Criteria criteria = teacherExample.createCriteria();
+		criteria.andTDeleteEqualTo(false);
+		if (teacher.gettUsername() != null && !"".equals(teacher.gettUsername())) {
+			criteria.andTUsernameEqualTo(teacher.gettUsername());
+		}
+		List<Teacher> teachers=teacherService.seleteByExample(teacherExample);
+		if (teachers.size()>0) {		
+			
+			if (teacher.gettPassword().equals(teachers.get(0).gettPassword())) {
+				map.put("teacher", teachers.get(0));			
+				
+			}else {
+				out.print("<script language=\"javascript\">alert('ÃÜÂë´íÎó£¬ÇëÖØÐÂµÇÂ¼£¡');window.location.href='/maventestmanager/teacherlogin.jsp'</script>");
+				out.flush();
+				out.close();
+						
+			}
+		}else {
+			out.print("<script language=\"javascript\">alert('ÓÃ»§Ãû´íÎó£¬ÇëÖØÐÂµÇÂ¼£¡');window.location.href='/maventestmanager/teacherlogin.jsp'</script>");
+			out.flush();
+			out.close();
+					
+		}
+		
+		return "teacherIndex";
+	
+	}
+}

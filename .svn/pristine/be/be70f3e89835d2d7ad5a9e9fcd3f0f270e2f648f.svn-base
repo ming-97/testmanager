@@ -1,0 +1,68 @@
+package com.pctc.action;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.SessionAttributes;
+
+import com.pctc.model.Student;
+import com.pctc.model.StudentExample;
+import com.pctc.model.StudentExample.Criteria;
+import com.pctc.service.StudentService;
+
+@Controller
+@RequestMapping("/login")
+@SessionAttributes(value={"student"}, types={String.class})
+public class StudentLoginAction {
+
+	@Autowired
+	private StudentService studentService;
+
+	// µÇÂ¼
+	@RequestMapping(value = "/studentLogin")
+	public String loginIn(Map<String, Object> map, Student student,HttpServletResponse response) throws IOException {
+		
+		response.setContentType("text/html;charset=utf-8");
+		PrintWriter out = response.getWriter();
+
+		StudentExample studentExample = new StudentExample();
+		Criteria criteria = studentExample.createCriteria();
+
+		if (student.getsUsername() != null && !"".equals(student.getsUsername().trim())){
+			criteria.andSUsernameLike(student.getsUsername());
+			criteria.andSDeleteEqualTo(false);
+		}
+		List<Student> students = studentService.getStudent(studentExample);
+		if (students.size() > 0 ) {
+			if (student.getsPassword().equals(students.get(0).getsPassword())) {
+				map.put("student", students.get(0));
+				
+			}else {
+				out.print("<script language=\"javascript\">alert('ÃÜÂë´íÎó£¬ÇëÖØÐÂµÇÂ¼£¡');window.location.href='/maventestmanager/studentlogin.jsp'</script>");
+				out.flush();
+				out.close();
+							
+			}
+		}else {
+			out.print("<script language=\"javascript\">alert('ÓÃ»§Ãû´íÎó£¬ÇëÖØÐÂµÇÂ¼£¡');window.location.href='/maventestmanager/studentlogin.jsp'</script>");
+			out.flush();
+			out.close();
+						
+		}
+
+		return "student/studentIndex";
+	
+
+	}
+
+}

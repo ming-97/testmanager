@@ -1,0 +1,54 @@
+package com.pctc.service.impl;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.pctc.dao.CourseChapterMapper;
+import com.pctc.model.CourseChapter;
+import com.pctc.model.CourseChapterExample;
+import com.pctc.model.CourseChapterExample.Criteria;
+import com.pctc.service.CourseChapterService;
+
+/**
+ * 
+ * @author zw
+ *
+ */
+@Service("courseChapterService")
+public class CourseChapterServiceImpl implements CourseChapterService {
+
+	@Autowired
+	private CourseChapterMapper courseChapterMapper;
+	
+	
+	//查询所有章节
+	public List<CourseChapter> selectAllCourseChapter(CourseChapterExample example) {
+		Criteria criteria=example.createCriteria();
+		criteria.andCcDeleteEqualTo(false);
+		List<CourseChapter> list=courseChapterMapper.selectByExample(example);
+		return list;
+	}
+
+      //添加章节
+	public int addCourseChapter(CourseChapter courseChapter) {
+		int count=courseChapterMapper.insertSelective(courseChapter);
+		return count;
+	}
+
+
+	public int updataCourseChapter(CourseChapter courseChapter) {
+		int count=courseChapterMapper.updateByPrimaryKeySelective(courseChapter);
+		return count;
+	}
+
+
+	public int deleteCourseChapter(Long ccId) {
+		int count=courseChapterMapper.deleteByPrimaryKey(ccId);
+		return count;
+	}
+
+
+
+}

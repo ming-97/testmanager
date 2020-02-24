@@ -1,0 +1,62 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+	<table>
+		<tr>
+			<td>章节测试id</td>
+			<td>题目id</td>
+			<td>操作</td>
+		</tr>
+		<c:forEach items="${questionCourseChapters}" var="qcChapter">
+			<tr>
+				<td>${qcChapter.qccId }</td>
+				<td>${qcChapter.qccQbid }</td>
+				<td><a
+					href="../returnPage/toupdateQuestionCourseChapter?qccId=${qcChapter.qccId}">修改</a>&nbsp;&nbsp;<a
+					href="../questionCourseChapterManager/deleteQuestionCourseChapter?qccId=${qcChapter.qccId}">删除</a></td>
+			</tr>
+		</c:forEach>
+	</table>
+	<div>
+		当前${pageInfo.pageNum }页，总共${pageInfo.total }条记录 <a
+			href="${webpath }../questionCourseChapterManager/selectAllQuestionCourseChapter?pageNum=1">首页</a>
+
+		<c:if test="${pageInfo.hasPreviousPage }">
+			<a
+				href="${webpath}../questionCourseChapterManager/selectAllQuestionCourseChapter?pageNum=${pageInfo.pageNum-1}">上一页</a>
+		</c:if>
+
+
+		<c:forEach items="${pageInfo.navigatepageNums }" var="pagenumber">
+			<a
+				href="${webpath }../questionCourseChapterManager/selectAllQuestionCourseChapter?pageNum=${pagenumber}">${pagenumber}</a>
+		</c:forEach>
+
+
+		<c:if test="${pageInfo.hasNextPage }">
+			<a
+				href="${webpath }../questionCourseChapterManager/selectAllQuestionCourseChapter?pageNum=${pageInfo.pageNum+1}">下一页</a>
+		</c:if>
+
+		<a
+			href="${webpath }../questionCourseChapterManager/selectAllQuestionCourseChapter?pageNum=${pageInfo.pages}">末页</a>
+	</div>
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>

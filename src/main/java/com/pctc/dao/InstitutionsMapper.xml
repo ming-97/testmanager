@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.pctc.dao.InstitutionsMapper" >
+  <resultMap id="BaseResultMap" type="com.pctc.model.Institutions" >
+    <id column="ins_id" property="insId" jdbcType="BIGINT" />
+    <result column="ins_type" property="insType" jdbcType="VARCHAR" />
+    <result column="ins_name" property="insName" jdbcType="VARCHAR" />
+    <result column="ins_create_by" property="insCreateBy" jdbcType="VARCHAR" />
+    <result column="ins_create_time" property="insCreateTime" jdbcType="DATE" />
+    <result column="ins_modify_by" property="insModifyBy" jdbcType="VARCHAR" />
+    <result column="ins_modify_time" property="insModifyTime" jdbcType="DATE" />
+    <result column="ins_delete" property="insDelete" jdbcType="BIT" />
+    <result column="ins_version" property="insVersion" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    ins_id, ins_type, ins_name, ins_create_by, ins_create_time, ins_modify_by, ins_modify_time, 
+    ins_delete, ins_version
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.pctc.model.InstitutionsExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from institutions
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from institutions
+    where ins_id = #{insId,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from institutions
+    where ins_id = #{insId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.pctc.model.InstitutionsExample" >
+    delete from institutions
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.pctc.model.Institutions" >
+    insert into institutions (ins_id, ins_type, ins_name, 
+      ins_create_by, ins_create_time, ins_modify_by, 
+      ins_modify_time, ins_delete, ins_version
+      )
+    values (#{insId,jdbcType=BIGINT}, #{insType,jdbcType=VARCHAR}, #{insName,jdbcType=VARCHAR}, 
+      #{insCreateBy,jdbcType=VARCHAR}, #{insCreateTime,jdbcType=DATE}, #{insModifyBy,jdbcType=VARCHAR}, 
+      #{insModifyTime,jdbcType=DATE}, #{insDelete,jdbcType=BIT}, #{insVersion,jdbcType=INTEGER}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.pctc.model.Institutions" >
+    insert into institutions
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="insId != null" >
+        ins_id,
+      </if>
+      <if test="insType != null" >
+        ins_type,
+      </if>
+      <if test="insName != null" >
+        ins_name,
+      </if>
+      <if test="insCreateBy != null" >
+        ins_create_by,
+      </if>
+      <if test="insCreateTime != null" >
+        ins_create_time,
+      </if>
+      <if test="insModifyBy != null" >
+        ins_modify_by,
+      </if>
+      <if test="insModifyTime != null" >
+        ins_modify_time,
+      </if>
+      <if test="insDelete != null" >
+        ins_delete,
+      </if>
+      <if test="insVersion != null" >
+        ins_version,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="insId != null" >
+        #{insId,jdbcType=BIGINT},
+      </if>
+      <if test="insType != null" >
+        #{insType,jdbcType=VARCHAR},
+      </if>
+      <if test="insName != null" >
+        #{insName,jdbcType=VARCHAR},
+      </if>
+      <if test="insCreateBy != null" >
+        #{insCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="insCreateTime != null" >
+        #{insCreateTime,jdbcType=DATE},
+      </if>
+      <if test="insModifyBy != null" >
+        #{insModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="insModifyTime != null" >
+        #{insModifyTime,jdbcType=DATE},
+      </if>
+      <if test="insDelete != null" >
+        #{insDelete,jdbcType=BIT},
+      </if>
+      <if test="insVersion != null" >
+        #{insVersion,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.pctc.model.InstitutionsExample" resultType="java.lang.Integer" >
+    select count(*) from institutions
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update institutions
+    <set >
+      <if test="record.insId != null" >
+        ins_id = #{record.insId,jdbcType=BIGINT},
+      </if>
+      <if test="record.insType != null" >
+        ins_type = #{record.insType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.insName != null" >
+        ins_name = #{record.insName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.insCreateBy != null" >
+        ins_create_by = #{record.insCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.insCreateTime != null" >
+        ins_create_time = #{record.insCreateTime,jdbcType=DATE},
+      </if>
+      <if test="record.insModifyBy != null" >
+        ins_modify_by = #{record.insModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="record.insModifyTime != null" >
+        ins_modify_time = #{record.insModifyTime,jdbcType=DATE},
+      </if>
+      <if test="record.insDelete != null" >
+        ins_delete = #{record.insDelete,jdbcType=BIT},
+      </if>
+      <if test="record.insVersion != null" >
+        ins_version = #{record.insVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update institutions
+    set ins_id = #{record.insId,jdbcType=BIGINT},
+      ins_type = #{record.insType,jdbcType=VARCHAR},
+      ins_name = #{record.insName,jdbcType=VARCHAR},
+      ins_create_by = #{record.insCreateBy,jdbcType=VARCHAR},
+      ins_create_time = #{record.insCreateTime,jdbcType=DATE},
+      ins_modify_by = #{record.insModifyBy,jdbcType=VARCHAR},
+      ins_modify_time = #{record.insModifyTime,jdbcType=DATE},
+      ins_delete = #{record.insDelete,jdbcType=BIT},
+      ins_version = #{record.insVersion,jdbcType=INTEGER}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.pctc.model.Institutions" >
+    update institutions
+    <set >
+      <if test="insType != null" >
+        ins_type = #{insType,jdbcType=VARCHAR},
+      </if>
+      <if test="insName != null" >
+        ins_name = #{insName,jdbcType=VARCHAR},
+      </if>
+      <if test="insCreateBy != null" >
+        ins_create_by = #{insCreateBy,jdbcType=VARCHAR},
+      </if>
+      <if test="insCreateTime != null" >
+        ins_create_time = #{insCreateTime,jdbcType=DATE},
+      </if>
+      <if test="insModifyBy != null" >
+        ins_modify_by = #{insModifyBy,jdbcType=VARCHAR},
+      </if>
+      <if test="insModifyTime != null" >
+        ins_modify_time = #{insModifyTime,jdbcType=DATE},
+      </if>
+      <if test="insDelete != null" >
+        ins_delete = #{insDelete,jdbcType=BIT},
+      </if>
+      <if test="insVersion != null" >
+        ins_version = #{insVersion,jdbcType=INTEGER},
+      </if>
+    </set>
+    where ins_id = #{insId,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.pctc.model.Institutions" >
+    update institutions
+    set ins_type = #{insType,jdbcType=VARCHAR},
+      ins_name = #{insName,jdbcType=VARCHAR},
+      ins_create_by = #{insCreateBy,jdbcType=VARCHAR},
+      ins_create_time = #{insCreateTime,jdbcType=DATE},
+      ins_modify_by = #{insModifyBy,jdbcType=VARCHAR},
+      ins_modify_time = #{insModifyTime,jdbcType=DATE},
+      ins_delete = #{insDelete,jdbcType=BIT},
+      ins_version = #{insVersion,jdbcType=INTEGER}
+    where ins_id = #{insId,jdbcType=BIGINT}
+  </update>
+</mapper>

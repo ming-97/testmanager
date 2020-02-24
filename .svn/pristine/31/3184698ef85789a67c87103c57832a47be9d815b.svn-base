@@ -1,0 +1,31 @@
+package com.pctc.service;
+
+import java.util.List;
+
+import com.pctc.model.CourseChapter;
+import com.pctc.model.CourseChapterExample;
+
+/**
+ * 
+ * @author zw
+ *
+ */
+public interface CourseChapterService {
+	
+	//查寻所有章节
+	public List<CourseChapter> selectAllCourseChapter(CourseChapterExample example);
+	
+	//根据名字查找章节号
+	public CourseChapter selectCourseChapterByName(String name);
+	
+	
+	//添加章节
+	public int addCourseChapter(CourseChapter courseChapter);
+	
+	//修改章节
+	public int updataCourseChapter(CourseChapter courseChapter);
+	
+	//删除章节
+	public int deleteCourseChapter(Long ccId);
+	
+}
